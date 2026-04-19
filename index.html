@@ -29,6 +29,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .btn-start:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.2)}
 .q-count{display:inline-block;background:rgba(255,255,255,.2);padding:.4rem 1rem;border-radius:20px;font-size:.85rem;margin-bottom:1.5rem}
 
+#name-input{justify-content:center;align-items:center;padding:2rem;background:var(--bg)}
+.name-wrap{background:var(--card);border-radius:24px;padding:2.5rem 2rem;box-shadow:var(--shadow);max-width:420px;width:100%;text-align:center}
+.name-title{font-size:1.25rem;font-weight:700;margin-bottom:.5rem;line-height:1.6;color:var(--text)}
+.name-desc{font-size:.85rem;color:var(--text-light);margin-bottom:1.8rem}
+.input-group{text-align:left;margin-bottom:1.2rem}
+.input-group label{display:block;font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.4rem}
+.input-group input{width:100%;padding:.85rem 1rem;border:2px solid #E8E6F0;border-radius:12px;font-size:1rem;transition:border-color .2s;outline:none;background:var(--bg)}
+.input-group input:focus{border-color:var(--primary)}
+.name-error{color:#E74C3C;font-size:.82rem;min-height:1.2em;margin:.3rem 0}
+.btn-next{width:100%;background:var(--primary);color:#fff;border:none;padding:1rem;border-radius:14px;font-size:1.05rem;font-weight:600;cursor:pointer;transition:all .3s;margin-top:.5rem}
+.btn-next:hover{background:var(--primary-dark)}
+
 #quiz{padding:0;background:var(--bg)}
 .progress-wrap{position:sticky;top:0;z-index:10;background:var(--card);padding:1rem 1.5rem .8rem;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .progress-info{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-light);margin-bottom:.5rem}
@@ -89,9 +101,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .rt-bar-outer{height:8px;background:#E8E6F0;border-radius:4px;overflow:hidden}
 .rt-bar-inner{height:100%;border-radius:4px;transition:width .6s ease}
 
-.btn-retry{display:block;margin:1.5rem auto 3rem;background:var(--primary);color:#fff;border:none;padding:.9rem 2.5rem;border-radius:60px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .3s}
-.btn-retry:hover{background:var(--primary-dark);transform:translateY(-1px)}
-.result-footer{text-align:center;padding:1rem;font-size:.78rem;color:var(--text-light)}
+.doc-section{background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:20px;padding:2rem 1.5rem;text-align:center;margin:1.5rem 0 2rem;color:#fff}
+.doc-text{font-size:1rem;font-weight:600;margin-bottom:1rem;opacity:.95}
+.btn-doc{display:inline-block;background:#fff;color:var(--primary);padding:.85rem 2rem;border-radius:60px;font-size:1rem;font-weight:700;text-decoration:none;transition:all .3s;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.btn-doc:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.doc-hint{font-size:.78rem;opacity:.7;margin-top:.8rem}
+
+.result-footer{text-align:center;padding:1.5rem 1rem 3rem;font-size:.78rem;color:var(--text-light)}
 </style>
 </head>
 <body>
@@ -101,8 +117,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
     <div class="q-count">全15問 / 約3分</div>
     <h1>あなたの「隠れた観念」診断</h1>
     <p class="subtitle">日常の場面で、あなたの心が<br>無意識に選んでいるパターンを見つけます</p>
-    <p class="lead">「〜しなきゃ」「〜してはいけない」<br>その思い込みの正体を、15の質問で明らかにします</p>
+    <p class="lead">「~しなきゃ」「~してはいけない」<br>その思い込みの正体を、15の質問で明らかにします</p>
     <button class="btn-start" onclick="startQuiz()">診断をはじめる</button>
+  </div>
+</section>
+
+<section id="name-input" class="screen">
+  <div class="name-wrap">
+    <h2 class="name-title">まず、あなたの情報を<br>教えてください</h2>
+    <p class="name-desc">診断結果のレポート作成に使用します</p>
+    <div class="input-group">
+      <label for="inp-line-name">LINE名</label>
+      <input type="text" id="inp-line-name" placeholder="LINEの表示名を入力">
+    </div>
+    <div class="input-group">
+      <label for="inp-full-name">お名前（フルネーム）</label>
+      <input type="text" id="inp-full-name" placeholder="山田太郎">
+    </div>
+    <p class="name-error" id="name-error"></p>
+    <button class="btn-next" onclick="submitName()">診断を開始する</button>
   </div>
 </section>
 
@@ -138,62 +171,146 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
     <div class="chart-wrap" id="rt-chart-wrap">
       <div id="rt-bars"></div>
     </div>
-    <button class="btn-retry" onclick="retry()">もう一度診断する</button>
+    <div class="doc-section" id="doc-section" style="display:none">
+      <p class="doc-text">あなた専用の診断レポートが作成されました</p>
+      <a href="#" id="doc-link" class="btn-doc" target="_blank">レポートを開く</a>
+      <p class="doc-hint">このリンクを保存しておくと、いつでも結果を確認できます</p>
+    </div>
   </div>
-  <div class="result-footer">観念診断 &copy; Keisuke</div>
+  <div class="result-footer">観念診断 by Keisuke</div>
 </section>
 
 <script>
 const QUESTIONS = [
   { scene:"友人数人との食事会。会話が盛り上がっている中、ふと頭をよぎるのは？", choices:[
-    {text:"自分はこの場に何か貢献できているだろうか",cat:"A"},{text:"みんなが楽しんでいるか気になる。場の空気を壊してないかな",cat:"B"},{text:"明日も仕事だし、こんなにゆっくりしていていいのかな",cat:"C"},{text:"本当は疲れてるけど、楽しそうにしていないと",cat:"D"},{text:"みんなすごいな。自分だけ何も変わってない",cat:"E"}]},
+    {text:"自分も何か面白い話をしないとな",cat:"A"},
+    {text:"みんなが楽しそうでよかった。自分の話は別にいいかな",cat:"B"},
+    {text:"楽しいけど、明日の準備もあるし時間が気になる",cat:"C"},
+    {text:"ちょっと疲れてるけど、テンション合わせておこう",cat:"D"},
+    {text:"みんないろんなことやってるんだな…",cat:"E"}]},
   { scene:"仕事でミスをして、上司に指摘された。帰り道に頭に浮かぶのは？", choices:[
-    {text:"やっぱり自分には能力が足りない",cat:"A"},{text:"上司や同僚にどう思われただろう",cat:"B"},{text:"もっと注意深くチェックすべきだった。気を抜いた自分が悪い",cat:"C"},{text:"悔しいけど、その気持ちを誰にも言えない",cat:"D"},{text:"この仕事、自分には向いてないのかもしれない",cat:"E"}]},
+    {text:"次はちゃんと結果で返さないと",cat:"A"},
+    {text:"周りの人はどう見てたかな",cat:"B"},
+    {text:"チェックリストを作り直そう。同じミスは絶対しない",cat:"C"},
+    {text:"悔しいけど、明日は何事もなかった顔で出社しよう",cat:"D"},
+    {text:"やっぱりこの仕事、自分のタイプじゃないのかも",cat:"E"}]},
   { scene:"日曜日、何もせずに一日が終わった。夜、布団の中で思うことは？", choices:[
-    {text:"今日一日、何の価値も生み出せなかった",cat:"A"},{text:"誰かに連絡すればよかった。誘いを断っちゃったし",cat:"B"},{text:"明日からもっとちゃんとしないと。こんな日を過ごしてる場合じゃない",cat:"C"},{text:"本当はゆっくりしたかったのに、なんで罪悪感があるんだろう",cat:"D"},{text:"結局いつもこう。自分は変われない",cat:"E"}]},
+    {text:"明日からまた頑張れば取り返せるかな",cat:"A"},
+    {text:"誰かと予定を入れればよかったかも",cat:"B"},
+    {text:"こういう日を作るのがもったいなく感じる",cat:"C"},
+    {text:"のんびりしたかったはずなのに、なんかモヤモヤする",cat:"D"},
+    {text:"まあ、いつもこんな感じの休日だな",cat:"E"}]},
   { scene:"仕事で成果を出して、同僚から「すごいね」と褒められた。心の中で思うのは？", choices:[
-    {text:"たまたまうまくいっただけ。次もできるかわからない",cat:"A"},{text:"褒められると居心地が悪い。目立ちたくない",cat:"B"},{text:"まだまだ。もっと上を目指さないと",cat:"C"},{text:"嬉しいけど、素直に喜んでいる自分を見せるのが恥ずかしい",cat:"D"},{text:"自分なんかが褒められていいのかな",cat:"E"}]},
+    {text:"たまたまうまくいっただけなんだけどな",cat:"A"},
+    {text:"あんまり目立つと変に思われないかな",cat:"B"},
+    {text:"これくらいで満足してたら止まっちゃうな",cat:"C"},
+    {text:"ありがとう、って素直に返すのが意外と難しい",cat:"D"},
+    {text:"自分でもできることあるんだな（ちょっと意外）",cat:"E"}]},
   { scene:"上司から新しいプロジェクトのリーダーを打診された。最初に頭をよぎるのは？", choices:[
-    {text:"自分にそんな役割を任されるほどの実力があるとは思えない",cat:"A"},{text:"メンバーの期待に応えられなかったらどうしよう",cat:"B"},{text:"引き受けたからには完璧にやり遂げないと",cat:"C"},{text:"不安だけど、不安だと正直に言えない",cat:"D"},{text:"自分にリーダーなんて無理だ",cat:"E"}]},
+    {text:"期待に見合う成果を出さないと",cat:"A"},
+    {text:"チームのみんなとうまくやっていけるかな",cat:"B"},
+    {text:"まずは情報を集めて、計画をしっかり立てないと",cat:"C"},
+    {text:"プレッシャーだけど、頼られてるうちは引き受けないとな",cat:"D"},
+    {text:"自分がリーダーって、ちょっとイメージ湧かないな",cat:"E"}]},
   { scene:"SNSで、同年代の知人が起業して成功している投稿を見た。感じるのは？", choices:[
-    {text:"自分は何も成し遂げていない",cat:"A"},{text:"あの人と比べられたくない",cat:"B"},{text:"自分ももっと努力しないと出遅れる",cat:"C"},{text:"本当はうらやましいけど、そう思う自分が嫌だ",cat:"D"},{text:"自分にはあんなことできない。才能が違う",cat:"E"}]},
+    {text:"自分も何か形にしないとな",cat:"A"},
+    {text:"あの人と比べられたら困るな",cat:"B"},
+    {text:"行動量が違うんだろうな。自分ももっとやらないと",cat:"C"},
+    {text:"すごいとは思うけど、素直に「おめでとう」を送るか迷う",cat:"D"},
+    {text:"あの人とは元々の環境が違うしな",cat:"E"}]},
   { scene:"パートナーや親しい人と意見が食い違った。あなたの自然な反応は？", choices:[
-    {text:"相手を不快にさせてしまった。自分が悪いんだ",cat:"A"},{text:"相手の気持ちを優先しよう。自分の意見は引っ込める",cat:"B"},{text:"ちゃんと話し合って、きちんと解決しないと",cat:"C"},{text:"本当に言いたいことは飲み込んで、表面的に合わせる",cat:"D"},{text:"どうせ自分が言っても何も変わらない",cat:"E"}]},
+    {text:"自分が折れたほうが早いし、波風立てないでおこう",cat:"A"},
+    {text:"相手の気持ちを先に聞いてからにしよう",cat:"B"},
+    {text:"ちゃんと論点を整理して、冷静に話し合いたい",cat:"C"},
+    {text:"言いたいことはあるけど、タイミングを見てからにしよう",cat:"D"},
+    {text:"言ったところで、伝わるかわからないしな",cat:"E"}]},
   { scene:"体調が悪くて、会社を休もうか迷っている朝。頭の中を占めているのは？", choices:[
-    {text:"休んだら「使えないやつ」と思われる",cat:"A"},{text:"自分が休んだら周りに迷惑がかかる",cat:"B"},{text:"少し無理してでも行くべきだ。休むのは甘えだ",cat:"C"},{text:"つらいと言い出せない。大げさだと思われたくない",cat:"D"},{text:"こんなことで休む自分が情けない",cat:"E"}]},
+    {text:"休むとその分、来週に負担がくるんだよな",cat:"A"},
+    {text:"自分が休んだらチームに申し訳ないな",cat:"B"},
+    {text:"午前だけでも行けば、最低限は片付くかな",cat:"C"},
+    {text:"声がちょっとおかしいだけだし、行けなくもないか",cat:"D"},
+    {text:"休んだところで、すぐ治るわけでもないしな",cat:"E"}]},
   { scene:"会議で「何かアイデアはありますか？」と振られた。思わず感じるのは？", choices:[
-    {text:"的外れなことを言って評価を下げたくない",cat:"A"},{text:"場の雰囲気を読んで、みんなが賛同しそうなことを言わないと",cat:"B"},{text:"ちゃんと準備しておくべきだった",cat:"C"},{text:"意見はあるけど、否定されるのが怖くて言えない",cat:"D"},{text:"自分のアイデアなんて大したことない",cat:"E"}]},
+    {text:"ちゃんとした意見を言わないと",cat:"A"},
+    {text:"みんなの方向性に合った発言にしよう",cat:"B"},
+    {text:"もっと事前に考えをまとめておけばよかった",cat:"C"},
+    {text:"思いついたことはあるけど、もうちょっと温めてからにしよう",cat:"D"},
+    {text:"パッとアイデアが出る人ってすごいな",cat:"E"}]},
   { scene:"引っ越しの荷造りで人手が足りない。友人に手伝いを頼もうか迷っている。", choices:[
-    {text:"お返しできるものがない自分が頼んでいいのか",cat:"A"},{text:"相手の時間を奪うのは申し訳ない",cat:"B"},{text:"自分でなんとかすべきだ。人に頼るのは甘えだ",cat:"C"},{text:"「助けて」の一言がどうしても出てこない",cat:"D"},{text:"頼んでも断られそう。そこまでの関係じゃないかも",cat:"E"}]},
+    {text:"何かお返ししないと悪いよな",cat:"A"},
+    {text:"休みの日に巻き込むのは気が引けるな",cat:"B"},
+    {text:"自分で計画を立てれば一人でもなんとかなるか",cat:"C"},
+    {text:"「手伝って」って言うの、意外とハードル高いんだよな",cat:"D"},
+    {text:"そこまでの関係の友達いたかな…",cat:"E"}]},
   { scene:"年末、一年を振り返っている。ふと湧き上がる感情は？", choices:[
-    {text:"今年も特に何者にもなれなかった",cat:"A"},{text:"あの時、あの人にもっとこうしてあげればよかった",cat:"B"},{text:"もっとやれたはずなのに。来年はもっと頑張らないと",cat:"C"},{text:"本当はしんどかったけど、誰にも言えなかった一年だった",cat:"D"},{text:"来年も結局同じだろうな",cat:"E"}]},
+    {text:"来年はもっと目に見える成果を出したい",cat:"A"},
+    {text:"あの人にもっと連絡すればよかったかも",cat:"B"},
+    {text:"やりたかったことの半分もできてないな",cat:"C"},
+    {text:"本当はけっこう大変な一年だったけど、まあなんとかなったかな",cat:"D"},
+    {text:"去年と比べて、何か変わったかと言われると微妙だな",cat:"E"}]},
   { scene:"ずっと興味があった習い事の体験教室を見つけた。申し込みボタンの前で考えるのは？", choices:[
-    {text:"今さら始めても何かを成し遂げられるわけじゃない",cat:"A"},{text:"下手だったら周りの人に迷惑じゃないかな",cat:"B"},{text:"仕事も忙しいのに、こんなことに時間を使っていいのか",cat:"C"},{text:"ワクワクしてるけど、この気持ちを誰かに言うのは恥ずかしい",cat:"D"},{text:"自分にできるわけがない。センスないし",cat:"E"}]},
+    {text:"趣味にお金と時間を使うなら、もっと実用的なことに投資したほうがいいかも",cat:"A"},
+    {text:"一人で行って、浮かないかな",cat:"B"},
+    {text:"今のスケジュールに入れられるか、まず確認しないと",cat:"C"},
+    {text:"やってみたい気持ちはあるけど、周りに言うのはちょっと恥ずかしいかも",cat:"D"},
+    {text:"今さら始めても、上手くなるまでに時間かかるしな",cat:"E"}]},
   { scene:"職場でみんなが残業している中、自分だけ定時で帰れる状況。どう感じる？", choices:[
-    {text:"自分だけ楽していていいのだろうか",cat:"A"},{text:"先に帰ったら「協調性がない」と思われそう",cat:"B"},{text:"何か手伝うことを探すべきだ",cat:"C"},{text:"帰りたいけど、「お先に」と言い出しづらい",cat:"D"},{text:"みんなは忙しいのに自分だけ暇なのは、能力不足だからかも",cat:"E"}]},
+    {text:"自分の仕事が軽いだけなんじゃないかな",cat:"A"},
+    {text:"先に帰ると空気的にどうかな",cat:"B"},
+    {text:"何か手伝えることがないか、一応聞いてみるか",cat:"C"},
+    {text:"帰りたいけど、「お先に」ってなんか言いづらい",cat:"D"},
+    {text:"効率よく終わらせたけど、特に褒められるわけでもないしな",cat:"E"}]},
   { scene:"久しぶりの休みに、好きな映画を一人で観に行こうとしている。ふと頭をよぎるのは？", choices:[
-    {text:"もっと自己投資になることに時間を使うべきでは",cat:"A"},{text:"一人で行くのは寂しい人だと思われそう",cat:"B"},{text:"溜まってるタスクを先に片付けてからにすべきだ",cat:"C"},{text:"好きなものを好きと素直に言うのが、なんとなく気恥ずかしい",cat:"D"},{text:"こんなことしても、自分の人生は別に変わらない",cat:"E"}]},
+    {text:"もっと自分のためになることに時間を使ったほうがいいかな",cat:"A"},
+    {text:"一人の休日の過ごし方、聞かれたらなんて言おう",cat:"B"},
+    {text:"観終わったら、溜まってるタスクに手をつけよう",cat:"C"},
+    {text:"好きなジャンルって人に聞かれると、ちょっと答えにくいんだよな",cat:"D"},
+    {text:"映画くらいじゃ、リフレッシュにならない気もするけど",cat:"E"}]},
   { scene:"大切なプレゼンの本番で頭が真っ白になってしまった。終わった後に感じるのは？", choices:[
-    {text:"自分の力を証明するチャンスを台無しにした",cat:"A"},{text:"聞いてくれた人たちの時間を無駄にしてしまった",cat:"B"},{text:"準備が足りなかった。もっと練習すべきだった",cat:"C"},{text:"悔しいし恥ずかしいけど、平気なふりをするしかない",cat:"D"},{text:"やっぱり自分にはこういうの向いてない",cat:"E"}]}
+    {text:"せっかくのチャンスを活かせなかった",cat:"A"},
+    {text:"聞いてた人たちに申し訳なかったな",cat:"B"},
+    {text:"次は絶対にこうならないように準備量を倍にしよう",cat:"C"},
+    {text:"動揺してたけど、なんとか最後まで通せたのはよかったかな",cat:"D"},
+    {text:"やっぱり人前で話すのは向いてないんだろうな",cat:"E"}]}
 ];
 
 const RESERVE = [
   { scene:"友人の結婚式でスピーチを頼まれた。最初に感じるのは？", choices:[
-    {text:"自分なんかが話しても誰も心に残らない",cat:"A"},{text:"つまらないスピーチをして場を白けさせたらどうしよう",cat:"B"},{text:"しっかり準備して、完璧に仕上げないと",cat:"C"},{text:"緊張してることを悟られたくない",cat:"D"},{text:"自分にそんな大役は荷が重すぎる",cat:"E"}]},
+    {text:"ちゃんと心に残るスピーチにしないとな",cat:"A"},
+    {text:"他のスピーチと比べられるのが気になる",cat:"B"},
+    {text:"台本を何回も練り直して、完成度を上げなきゃ",cat:"C"},
+    {text:"緊張してるけど、堂々とやってるように見せたい",cat:"D"},
+    {text:"自分のスピーチで空気が変わっちゃったらどうしよう",cat:"E"}]},
   { scene:"後輩から「相談したいことがある」と言われた。思うことは？", choices:[
-    {text:"自分が役に立てるアドバイスができるだろうか",cat:"A"},{text:"期待に応えられなかったら申し訳ない",cat:"B"},{text:"ちゃんと向き合って、しっかり答えないと",cat:"C"},{text:"実は自分も余裕がないけど、断れない",cat:"D"},{text:"自分なんかに相談しても意味ないんじゃないか",cat:"E"}]},
+    {text:"いいアドバイスができるように、ちゃんと準備しておこう",cat:"A"},
+    {text:"期待に応えられなかったら気まずいな",cat:"B"},
+    {text:"真剣に向き合ってあげないと失礼だよな",cat:"C"},
+    {text:"実は自分も余裕ないけど、それは言えないな",cat:"D"},
+    {text:"自分にアドバイスする力があるかは正直わからない",cat:"E"}]},
   { scene:"チームで自分だけ違う意見を持っている会議。あなたの思考は？", choices:[
-    {text:"間違った意見を言って「センスがない」と思われたくない",cat:"A"},{text:"空気を壊してまで主張する価値があるのか",cat:"B"},{text:"ちゃんと根拠を整理してから発言しないと",cat:"C"},{text:"反対意見を言う自分を想像すると胃が痛い",cat:"D"},{text:"どうせ自分の意見は通らない",cat:"E"}]},
+    {text:"的外れだったら評価に響くよな",cat:"A"},
+    {text:"場の流れを壊してまで言うことじゃないかも",cat:"B"},
+    {text:"もう少しデータを集めてから、次の機会に発言しよう",cat:"C"},
+    {text:"反対意見を言う自分を想像すると、なんか気が重い",cat:"D"},
+    {text:"言ったところで自分の意見は通らないだろうし",cat:"E"}]},
   { scene:"初めての場所で道に迷ってしまった。頭をよぎるのは？", choices:[
-    {text:"こんな簡単なことで迷う自分が情けない",cat:"A"},{text:"人に聞いたら迷惑じゃないかな",cat:"B"},{text:"事前にもっと調べておくべきだった",cat:"C"},{text:"困ってるけど、平然としていないと",cat:"D"},{text:"自分は方向音痴だから仕方ない",cat:"E"}]},
+    {text:"こんなことで手間取る自分がちょっと情けない",cat:"A"},
+    {text:"人に聞くのも迷惑かもしれないし、自力で探すか",cat:"B"},
+    {text:"事前にもっとちゃんと調べておくべきだった",cat:"C"},
+    {text:"焦ってるけど、焦ってない顔で歩こう",cat:"D"},
+    {text:"方向感覚ないのはもう直らないんだろうな",cat:"E"}]},
   { scene:"自分の誕生日が近づいてきた。ふと思うのは？", choices:[
-    {text:"この一年で何か成長できただろうか",cat:"A"},{text:"お祝いしてもらうほどの人間だろうか",cat:"B"},{text:"来年こそはもっと頑張らないと",cat:"C"},{text:"嬉しいはずなのに、素直に喜べない",cat:"D"},{text:"また一つ歳を取るだけ。何も変わらない",cat:"E"}]}
+    {text:"この一年、何か胸を張れることあったかな",cat:"A"},
+    {text:"お祝いの連絡が来るか来ないかが、ちょっと気になる",cat:"B"},
+    {text:"来年の目標をそろそろ決めないとな",cat:"C"},
+    {text:"嬉しいはずなのに、変にテンション上がらない自分がいる",cat:"D"},
+    {text:"歳取ったな、くらいの感想しかない",cat:"E"}]}
 ];
 
 const CATEGORIES = {
   A:{id:"A",name:"存在価値系",typeName:"「条件付きの自分」",color:"#E74C3C",
     desc:"あなたは「何かができる自分」「何かを持っている自分」でないと価値がない、と無意識に信じている傾向があります。ありのままの自分に存在価値を感じにくく、常に「自分は足りているか？」という問いが心の中で回っています。",
-    kannen:["人に役に立たないといけない","価値を生み出さないといけない","そのままではいけない","特別な能力やスキルがないといけない","何かを持っていないと愛されない","成果を出さないと認めてもらえない","自分には価値がない"]},
+    kannen:["人に役に立たないといけない","価値を生み出さないといけない","そのままではいけない","特別な能力やスキルがないといけない","成果を出さないと認めてもらえない","何かを持っていないと愛されない","自分には価値がない"]},
   B:{id:"B",name:"対人関係系",typeName:"「透明な自分」",color:"#3498DB",
     desc:"あなたは他者との関係の中で、自分を消すことで安全を守ろうとする傾向があります。「嫌われたくない」「迷惑をかけたくない」が行動の基準になり、自分の意志よりも周囲の空気を優先してしまいます。",
     kannen:["迷惑をかけちゃいけない","人に嫌われてはいけない","空気を読まないといけない","相手の期待に応えないといけない","NOと言ってはいけない","人の気持ちを優先しないといけない","自分の意見を主張してはいけない"]},
@@ -208,7 +325,7 @@ const CATEGORIES = {
     kannen:["自分はできない","自分には才能がない","自信がないといけない","失敗してはいけない","自分が変わるのは難しい","幸せになってはいけない","お金を稼ぐのは悪いことだ"]}
 };
 
-// STATE
+let userName = { lineName:'', fullName:'' };
 let currentQ = 0;
 let totalAnswered = 0;
 const answers = [];
@@ -231,6 +348,18 @@ function showScreen(id) {
 }
 
 function startQuiz() {
+  showScreen('name-input');
+  document.getElementById('inp-line-name').focus();
+}
+
+function submitName() {
+  const lineName = document.getElementById('inp-line-name').value.trim();
+  const fullName = document.getElementById('inp-full-name').value.trim();
+  if (!lineName || !fullName) {
+    document.getElementById('name-error').textContent = '両方入力してください';
+    return;
+  }
+  userName = { lineName, fullName };
   currentQ = 0;
   totalAnswered = 0;
   answers.length = 0;
@@ -310,18 +439,19 @@ function skipQuestion() {
   renderQuestion();
 }
 
-function showAnalyzing() {
-  showScreen('analyzing');
-  const msgs = ["あなたの回答を分析しています...","反応速度から、心の深層パターンを解析中...","もう少しで結果が出ます..."];
-  let i = 0;
-  const msgEl = document.getElementById('analyze-msg');
-  const iv = setInterval(() => {
-    i++;
-    if (i < msgs.length) {
-      msgEl.style.opacity = 0;
-      setTimeout(() => { msgEl.textContent = msgs[i]; msgEl.style.opacity = 1; }, 300);
-    } else { clearInterval(iv); showResults(); }
-  }, 1400);
+function playAnimation() {
+  return new Promise(resolve => {
+    const msgs = ["あなたの回答を分析しています...","心の深層パターンを解析中...","あなた専用のレポートを作成中..."];
+    let i = 0;
+    const msgEl = document.getElementById('analyze-msg');
+    const iv = setInterval(() => {
+      i++;
+      if (i < msgs.length) {
+        msgEl.style.opacity = 0;
+        setTimeout(() => { msgEl.textContent = msgs[i]; msgEl.style.opacity = 1; }, 300);
+      } else { clearInterval(iv); resolve(); }
+    }, 1400);
+  });
 }
 
 function calcScores() {
@@ -330,10 +460,59 @@ function calcScores() {
   return scores;
 }
 
-function showResults() {
+async function submitToGAS(scores, topCat) {
+  if (!GAS_URL) return null;
+  const payload = {
+    timestamp: new Date().toISOString(),
+    lineName: userName.lineName,
+    fullName: userName.fullName,
+    answers: answers.map(a => `Q${a.question}:${a.category}`).join(','),
+    scoreA:scores.A, scoreB:scores.B, scoreC:scores.C, scoreD:scores.D, scoreE:scores.E,
+    mainPattern: `${topCat.name} ${topCat.typeName}`,
+    reactionTimes: answers.map(a => `Q${a.question}:${a.responseTime.toFixed(1)}s`).join(','),
+    skips: skipCount,
+    answerDetails: JSON.stringify(answers.map(a => ({q:a.question, cat:a.category, time:a.responseTime, scene:a.scene}))),
+    ua: navigator.userAgent
+  };
+  try {
+    const res = await fetch(GAS_URL, {method:'POST', body:JSON.stringify(payload), redirect:'follow'});
+    const text = await res.text();
+    const data = JSON.parse(text);
+    return data.docUrl || null;
+  } catch(e) {
+    try { await fetch(GAS_URL, {method:'POST', mode:'no-cors', body:JSON.stringify(payload)}); } catch(e2){}
+    return null;
+  }
+}
+
+async function showAnalyzing() {
+  showScreen('analyzing');
   const scores = calcScores();
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const topCat = CATEGORIES[sorted[0][0]];
+
+  const gasPromise = submitToGAS(scores, topCat);
+  await playAnimation();
+
+  const msgEl = document.getElementById('analyze-msg');
+  msgEl.style.opacity = 0;
+  setTimeout(() => {
+    if (!document.getElementById('results').classList.contains('active')) {
+      msgEl.textContent = 'レポートを仕上げています...';
+      msgEl.style.opacity = 1;
+    }
+  }, 200);
+
+  const docUrl = await Promise.race([
+    gasPromise,
+    new Promise(r => setTimeout(() => r(null), 25000))
+  ]);
+
+  showResults(scores, topCat, docUrl);
+}
+
+function showResults(scores, topCat, docUrl) {
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const total = answers.length;
 
   document.getElementById('result-title').textContent = 'あなたの主要な観念パターン';
@@ -341,7 +520,6 @@ function showResults() {
 
   showScreen('results');
 
-  // Radar
   const ctx = document.getElementById('radar-chart').getContext('2d');
   if (window._chart) window._chart.destroy();
   window._chart = new Chart(ctx, {
@@ -361,7 +539,6 @@ function showResults() {
     }
   });
 
-  // Category cards
   document.getElementById('cat-cards').innerHTML = sorted.map(([catId, score], i) => {
     const c = CATEGORIES[catId];
     return `<div class="cat-card cat-${catId} ${i===0?'main':''}">
@@ -371,12 +548,10 @@ function showResults() {
     </div>`;
   }).join('');
 
-  // Depth map (reaction time)
   const sortedByTime = [...answers].sort((a, b) => a.responseTime - b.responseTime);
   const fastest = sortedByTime[0];
   const slowest = sortedByTime[sortedByTime.length - 1];
   const maxTime = slowest.responseTime;
-
   const sceneShort = s => s.length > 40 ? s.slice(0, 40) + '...' : s;
 
   document.getElementById('depth-cards').innerHTML = `
@@ -385,18 +560,17 @@ function showResults() {
       <div class="depth-scene">${sceneShort(fastest.scene)}</div>
       <div class="depth-cat">${CATEGORIES[fastest.category].name} ${CATEGORIES[fastest.category].typeName}</div>
       <div class="depth-time" style="color:${CATEGORIES[fastest.category].color}">${fastest.responseTime.toFixed(1)}秒</div>
-      <div class="depth-hint">迷いなく選んだ ＝ この観念が最も深く内面化されています</div>
+      <div class="depth-hint">迷いなく選んだ = この観念が最も深く内面化されています</div>
     </div>
     <div class="depth-card depth-slowest">
       <div class="depth-label">最も迷った場面</div>
       <div class="depth-scene">${sceneShort(slowest.scene)}</div>
       <div class="depth-cat">${CATEGORIES[slowest.category].name} ${CATEGORIES[slowest.category].typeName}</div>
       <div class="depth-time" style="color:${CATEGORIES[slowest.category].color}">${slowest.responseTime.toFixed(1)}秒</div>
-      <div class="depth-hint">迷い ＝ この観念を意識化し始めている段階かもしれません</div>
+      <div class="depth-hint">迷い = この観念を意識化し始めている段階かもしれません</div>
     </div>
   `;
 
-  // RT bars
   document.getElementById('rt-bars').innerHTML = `<div style="font-size:.85rem;font-weight:600;margin-bottom:.8rem;color:var(--text-light)">全問の反応速度</div>` +
     answers.map(a => {
       const pct = Math.max((a.responseTime / maxTime) * 100, 8);
@@ -407,30 +581,21 @@ function showResults() {
       </div>`;
     }).join('');
 
-  submitToGAS(scores, topCat);
+  if (docUrl) {
+    document.getElementById('doc-section').style.display = '';
+    document.getElementById('doc-link').href = docUrl;
+  }
 }
-
-function submitToGAS(scores, topCat) {
-  if (!GAS_URL) return;
-  const payload = {
-    timestamp: new Date().toISOString(),
-    answers: answers.map(a => `Q${a.question}:${a.category}`).join(','),
-    scoreA:scores.A, scoreB:scores.B, scoreC:scores.C, scoreD:scores.D, scoreE:scores.E,
-    mainPattern: `${topCat.name} ${topCat.typeName}`,
-    reactionTimes: answers.map(a => `Q${a.question}:${a.responseTime.toFixed(1)}s`).join(','),
-    skips: skipCount,
-    ua: navigator.userAgent
-  };
-  fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
-}
-
-function retry() { showScreen('landing'); }
 
 document.addEventListener('keydown', e => {
   if (document.getElementById('quiz').classList.contains('active')) {
     const idx = '12345'.indexOf(e.key);
     if (idx >= 0 && idx < activeQuestions[currentQ].choices.length) selectChoice(idx);
   }
+});
+
+document.getElementById('inp-full-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitName();
 });
 </script>
 </body>
