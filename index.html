@@ -589,6 +589,8 @@ function showResults(scores, topCat) {
     }).join('');
 
   window._shareUrl = generateShareUrl(scores);
+  window._pdfScores = scores;
+  window._pdfTopCat = topCat;
   document.getElementById('doc-section').style.display = '';
 }
 
@@ -614,6 +616,79 @@ function generateShareUrl(scores) {
   return window.location.href.split('#')[0] + '#r=' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
 }
 
+function buildPdfHtml(scores, topCat) {
+  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+  const total = Object.values(scores).reduce((s,v) => s+v, 0);
+  const name = userName.fullName || '回答者';
+  const date = new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'long',day:'numeric'});
+
+  let catCards = '';
+  sorted.forEach(([k,v], i) => {
+    const c = CATEGORIES[k];
+    const pct = total > 0 ? Math.max(Math.round(v/total*100), 5) : 5;
+    catCards += `<div style="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid ${c.color}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-weight:700;color:${c.color};font-size:13px">${i===0?'★ ':''}${c.name} ${c.typeName}</span>
+        <span style="font-size:11px;background:#f0eef5;padding:2px 8px;border-radius:8px;font-weight:600">${v} / ${total}</span>
+      </div>
+      <div style="height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-bottom:8px">
+        <div style="height:100%;width:${pct}%;background:${c.color};border-radius:3px"></div>
+      </div>
+      <p style="font-size:12px;color:#555;line-height:1.7;margin:0 0 8px">${c.desc}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${c.kannen.map(k => `<span style="font-size:10px;background:#f3f1ff;color:#5b4fbe;padding:2px 8px;border-radius:6px">・${k}</span>`).join('')}</div>
+    </div>`;
+  });
+
+  let depthHtml = '';
+  if (answers.length > 0) {
+    const byTime = [...answers].sort((a,b) => a.responseTime - b.responseTime);
+    const fastest = byTime[0], slowest = byTime[byTime.length-1];
+    const fC = CATEGORIES[fastest.category], sC = CATEGORIES[slowest.category];
+    const maxT = slowest.responseTime;
+    depthHtml = `<div style="font-size:14px;font-weight:700;color:#2D2645;margin:18px 0 10px">深層マップ</div>
+      <div style="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px;margin-bottom:8px;border-left:4px solid ${fC.color}">
+        <div style="font-size:10px;font-weight:700;color:${fC.color};text-transform:uppercase;margin-bottom:4px">最も速く反応した場面</div>
+        <div style="font-size:12px;font-weight:600;line-height:1.5">${fastest.scene||'Q'+fastest.question}</div>
+        <div style="font-size:11px;color:#888">${fC.name}</div>
+        <div style="font-size:20px;font-weight:800;color:${fC.color};margin-top:2px">${fastest.responseTime.toFixed(1)}秒</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px;margin-bottom:8px;border-left:4px solid ${sC.color}">
+        <div style="font-size:10px;font-weight:700;color:${sC.color};text-transform:uppercase;margin-bottom:4px">最も迷った場面</div>
+        <div style="font-size:12px;font-weight:600;line-height:1.5">${slowest.scene||'Q'+slowest.question}</div>
+        <div style="font-size:11px;color:#888">${sC.name}</div>
+        <div style="font-size:20px;font-weight:800;color:${sC.color};margin-top:2px">${slowest.responseTime.toFixed(1)}秒</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:600;color:#6b6b80;margin-bottom:8px">全問の反応速度</div>
+        ${answers.map(a => {
+          const ac = CATEGORIES[a.category];
+          const pct = Math.max((a.responseTime/maxT)*100, 3);
+          return `<div style="margin-bottom:5px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:2px"><span>Q${a.question} ${ac.name}</span><span>${a.responseTime.toFixed(1)}秒</span></div>
+            <div style="height:5px;background:#eee;border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${ac.color};border-radius:3px"></div></div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  return `<div style="width:480px;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP',sans-serif;background:#fff;color:#2D2645;line-height:1.6;padding:30px 24px">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:11px;color:#7B68EE;font-weight:600;margin-bottom:6px">観念診断レポート</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:4px">${name} さんの診断結果</div>
+      <div style="font-size:15px;color:#6B6090">${topCat.name} ${topCat.typeName}</div>
+      <div style="font-size:11px;color:#9E96B8;margin-top:6px">${date}</div>
+    </div>
+    <div style="font-size:14px;font-weight:700;margin:16px 0 10px">カテゴリ別スコア</div>
+    ${catCards}
+    ${depthHtml}
+    <div style="background:#f8f7ff;border-radius:12px;padding:16px;margin-top:16px;font-size:12px;color:#555;line-height:1.8">
+      <p>この診断結果は、あなたの無意識的な思考パターンの傾向を示すものです。</p>
+      <p style="margin-top:8px"><strong>観念は変えられます。</strong>まずは「自分がこういうパターンを持っている」と認識すること。それが変化の第一歩です。</p>
+    </div>
+    <div style="text-align:center;font-size:10px;color:#bbb;margin-top:16px">観念診断 by Keisuke</div>
+  </div>`;
+}
+
 async function downloadPDF() {
   const btn = document.getElementById('btn-pdf');
   const hint = document.getElementById('pdf-hint');
@@ -621,84 +696,51 @@ async function downloadPDF() {
   btn.disabled = true;
 
   try {
-    const resultsEl = document.getElementById('results');
-    const docSection = document.getElementById('doc-section');
-    const footer = resultsEl.querySelector('.result-footer');
-    const hero = resultsEl.querySelector('.result-hero');
-    docSection.style.display = 'none';
-    if (footer) footer.style.display = 'none';
+    const scores = window._pdfScores;
+    const topCat = window._pdfTopCat;
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1';
+    wrap.innerHTML = buildPdfHtml(scores, topCat);
+    document.body.appendChild(wrap);
 
-    resultsEl.style.background = '#fff';
-    if (hero) {
-      hero.dataset.origBg = hero.style.background || '';
-      hero.style.background = '#fff';
-    }
-    resultsEl.querySelectorAll('.chart-wrap,.cat-card,.depth-card').forEach(el => {
-      el.dataset.origBg = el.style.background || '';
-      el.style.background = '#fff';
-      el.style.border = '1px solid #e8e4f0';
-    });
+    await new Promise(r => setTimeout(r, 100));
 
-    const canvas = await html2canvas(resultsEl, {
+    const target = wrap.firstElementChild;
+    const canvas = await html2canvas(target, {
       scale: 2,
       useCORS: true,
-      backgroundColor: '#ffffff',
-      width: resultsEl.scrollWidth,
-      height: resultsEl.scrollHeight,
-      windowWidth: 640
+      backgroundColor: '#ffffff'
     });
+    document.body.removeChild(wrap);
 
-    resultsEl.style.background = '';
-    if (hero) hero.style.background = hero.dataset.origBg;
-    resultsEl.querySelectorAll('.chart-wrap,.cat-card,.depth-card').forEach(el => {
-      el.style.background = el.dataset.origBg;
-      el.style.border = '';
-    });
-    docSection.style.display = '';
-    if (footer) footer.style.display = '';
-
-    const imgData = canvas.toDataURL('image/jpeg', 0.92);
     const { jsPDF } = window.jspdf;
-    const pdfW = 210;
-    const margin = 10;
-    const contentW = pdfW - margin * 2;
+    const pdfW = 210, margin = 10, contentW = pdfW - margin*2;
     const ratio = canvas.height / canvas.width;
     const contentH = contentW * ratio;
-    const pageH = 297 - margin * 2;
+    const pageH = 297 - margin*2;
+    const pdf = new jsPDF('p','mm','a4');
 
     if (contentH <= pageH) {
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      pdf.addImage(imgData, 'JPEG', margin, margin, contentW, contentH);
-      pdf.save(`観念診断_${userName.fullName || '結果'}.pdf`);
+      pdf.addImage(canvas.toDataURL('image/jpeg',0.92), 'JPEG', margin, margin, contentW, contentH);
     } else {
-      const pdf = new jsPDF('p', 'mm', 'a4');
       const totalPages = Math.ceil(contentH / pageH);
       for (let i = 0; i < totalPages; i++) {
         if (i > 0) pdf.addPage();
         const srcY = (i * pageH / contentH) * canvas.height;
         const srcH = Math.min((pageH / contentH) * canvas.height, canvas.height - srcY);
-        const sliceCanvas = document.createElement('canvas');
-        sliceCanvas.width = canvas.width;
-        sliceCanvas.height = srcH;
-        const ctx = sliceCanvas.getContext('2d');
-        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
-        const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.92);
-        const sliceH = (srcH / canvas.height) * contentH;
-        pdf.addImage(sliceData, 'JPEG', margin, margin, contentW, sliceH);
+        const slice = document.createElement('canvas');
+        slice.width = canvas.width; slice.height = srcH;
+        slice.getContext('2d').drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
+        pdf.addImage(slice.toDataURL('image/jpeg',0.92), 'JPEG', margin, margin, contentW, (srcH/canvas.height)*contentH);
       }
-      pdf.save(`観念診断_${userName.fullName || '結果'}.pdf`);
     }
+    pdf.save(`観念診断_${userName.fullName || '結果'}.pdf`);
 
     btn.textContent = 'ダウンロード完了 ✓';
     hint.textContent = 'PDFが保存されました';
-    setTimeout(() => {
-      btn.textContent = '診断レポートをダウンロード';
-      btn.disabled = false;
-      hint.textContent = 'PDFファイルとして保存できます';
-    }, 3000);
+    setTimeout(() => { btn.textContent = '診断レポートをダウンロード'; btn.disabled = false; hint.textContent = 'PDFファイルとして保存できます'; }, 3000);
   } catch (e) {
-    btn.textContent = '診断レポートをダウンロード';
-    btn.disabled = false;
+    btn.textContent = '診断レポートをダウンロード'; btn.disabled = false;
     hint.textContent = 'エラーが発生しました。もう一度お試しください';
   }
 }
