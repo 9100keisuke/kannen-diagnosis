@@ -624,18 +624,36 @@ async function downloadPDF() {
     const resultsEl = document.getElementById('results');
     const docSection = document.getElementById('doc-section');
     const footer = resultsEl.querySelector('.result-footer');
+    const hero = resultsEl.querySelector('.result-hero');
     docSection.style.display = 'none';
     if (footer) footer.style.display = 'none';
+
+    resultsEl.style.background = '#fff';
+    if (hero) {
+      hero.dataset.origBg = hero.style.background || '';
+      hero.style.background = '#fff';
+    }
+    resultsEl.querySelectorAll('.chart-wrap,.cat-card,.depth-card').forEach(el => {
+      el.dataset.origBg = el.style.background || '';
+      el.style.background = '#fff';
+      el.style.border = '1px solid #e8e4f0';
+    });
 
     const canvas = await html2canvas(resultsEl, {
       scale: 2,
       useCORS: true,
-      backgroundColor: '#F5F2FF',
+      backgroundColor: '#ffffff',
       width: resultsEl.scrollWidth,
       height: resultsEl.scrollHeight,
       windowWidth: 640
     });
 
+    resultsEl.style.background = '';
+    if (hero) hero.style.background = hero.dataset.origBg;
+    resultsEl.querySelectorAll('.chart-wrap,.cat-card,.depth-card').forEach(el => {
+      el.style.background = el.dataset.origBg;
+      el.style.border = '';
+    });
     docSection.style.display = '';
     if (footer) footer.style.display = '';
 
