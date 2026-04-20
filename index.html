@@ -30,14 +30,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 #landing{justify-content:center;align-items:center;text-align:center;padding:2rem;background:linear-gradient(160deg,#EDE7FF 0%,#F5F0FF 30%,#E8F4FD 60%,#F0E8FF 100%);color:var(--text);position:relative;overflow:hidden}
 #landing::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 10%,rgba(123,104,238,.25) 0%,transparent 50%),radial-gradient(ellipse at 80% 85%,rgba(44,184,154,.12) 0%,transparent 45%),radial-gradient(ellipse at 55% 50%,rgba(157,143,255,.1) 0%,transparent 55%);animation:nebula 15s ease-in-out infinite alternate;pointer-events:none}
 #landing>div{position:relative;z-index:1}
-#landing h1{font-size:clamp(1.4rem,4.5vw,2.1rem);font-weight:800;margin-bottom:1rem;letter-spacing:-.02em;line-height:1.6;color:#2D2645}
+#landing h1{font-size:clamp(1.4rem,4.5vw,2.1rem);font-weight:800;margin-bottom:.8rem;letter-spacing:-.02em;line-height:1.5;color:#2D2645}
 #landing h1 .accent{background:linear-gradient(135deg,#7B68EE,#9D8FFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.15em;filter:drop-shadow(0 0 8px rgba(123,104,238,.3))}
-#landing .subtitle{font-size:clamp(.88rem,2.4vw,1.05rem);opacity:.75;margin-bottom:1.5rem;line-height:2.1}
-#landing .lead{font-size:.88rem;opacity:.5;max-width:360px;margin:0 auto 2.5rem}
+#landing .subtitle{font-size:clamp(.88rem,2.4vw,1.05rem);opacity:.75;margin-bottom:1rem;line-height:1.9}
+#landing .lead{font-size:.88rem;opacity:.5;max-width:360px;margin:0 auto 1.8rem}
 .btn-start{background:linear-gradient(135deg,#7B68EE,#9D8FFF);color:#fff;border:none;padding:1rem 3rem;border-radius:60px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .4s;box-shadow:0 4px 20px rgba(123,104,238,.35);position:relative}
 .btn-start:hover{transform:translateY(-3px);box-shadow:0 8px 35px rgba(123,104,238,.45)}
 .btn-start::after{content:'';position:absolute;inset:-2px;border-radius:inherit;background:linear-gradient(135deg,rgba(123,104,238,.4),rgba(44,184,154,.3));z-index:-1;filter:blur(16px);opacity:.5;animation:btnGlow 4s ease-in-out infinite alternate}
-.q-count{display:inline-block;background:rgba(123,104,238,.08);padding:.4rem 1rem;border-radius:20px;font-size:.82rem;margin-bottom:1.5rem;border:1px solid rgba(123,104,238,.15);letter-spacing:.03em;color:var(--primary)}
+.q-count{display:inline-block;background:rgba(123,104,238,.08);padding:.4rem 1rem;border-radius:20px;font-size:.82rem;margin-bottom:1rem;border:1px solid rgba(123,104,238,.15);letter-spacing:.03em;color:var(--primary)}
 @keyframes nebula{0%{opacity:.7;transform:scale(1) rotate(0deg)}100%{opacity:1;transform:scale(1.05) rotate(1deg)}}
 @keyframes btnGlow{0%{opacity:.3}100%{opacity:.7}}
 .particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
