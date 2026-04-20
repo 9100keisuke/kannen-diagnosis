@@ -27,38 +27,24 @@ function doPost(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName('回答データ');
 
-    if (sheet && sheet.getLastColumn() < 15) {
-      sheet.setName('回答データ_旧_' + Date.now());
-      sheet = null;
-    }
-
     if (!sheet) {
       sheet = ss.insertSheet('回答データ');
-      var headers = ['タイムスタンプ','LINE名','氏名','回答詳細','A:存在価値','B:対人関係','C:努力行動','D:感情表現','E:可能性変化','主要パターン','反応速度','スキップ回数','レポートURL','UA','UUID'];
-      sheet.appendRow(headers);
-      sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+      sheet.appendRow(['タイムスタンプ','LINE名','氏名','レポートURL']);
+      sheet.getRange(1, 1, 1, 4).setFontWeight('bold');
       sheet.setFrozenRows(1);
     }
 
-    var uuid = Utilities.getUuid();
-    var reportUrl = ScriptApp.getService().getUrl() + '?id=' + uuid;
+    var reportUrl = data.reportUrl || '';
 
     sheet.appendRow([
       data.timestamp || new Date().toISOString(),
       data.lineName || '',
       data.fullName || '',
-      data.answerDetails || data.answers || '',
-      data.scoreA || 0, data.scoreB || 0, data.scoreC || 0, data.scoreD || 0, data.scoreE || 0,
-      data.mainPattern || '',
-      data.reactionTimes || '',
-      data.skips || 0,
-      reportUrl,
-      data.ua || '',
-      uuid
+      reportUrl
     ]);
 
     return ContentService
-      .createTextOutput(JSON.stringify({ status: 'ok', docUrl: reportUrl }))
+      .createTextOutput(JSON.stringify({ status: 'ok' }))
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch (err) {

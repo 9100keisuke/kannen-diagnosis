@@ -364,7 +364,7 @@ let skipCount = 0;
 const MAX_SKIPS = 5;
 let qStartTime = 0;
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwM9BMrS4KDVuVSet7fQ3zngtT_2WM-QufRI4tPS7Q34I-ZZylHVnCRPqjETKWquHHp/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyLQDTrFKsErA4Z5znf-z3SoD_abTiMO9wJuGtJwwOBb9hM7AU1wSpYEIj_rfdGR8O8/exec";
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -489,28 +489,18 @@ function calcScores() {
   return scores;
 }
 
-async function submitToGAS(scores, topCat) {
-  if (!GAS_URL) return null;
+async function submitToGAS(reportUrl) {
+  if (!GAS_URL) return;
   const payload = {
     timestamp: new Date().toISOString(),
     lineName: userName.lineName,
     fullName: userName.fullName,
-    answers: answers.map(a => `Q${a.question}:${a.category}`).join(','),
-    scoreA:scores.A, scoreB:scores.B, scoreC:scores.C, scoreD:scores.D, scoreE:scores.E,
-    mainPattern: `${topCat.name} ${topCat.typeName}`,
-    reactionTimes: answers.map(a => `Q${a.question}:${a.responseTime.toFixed(1)}s`).join(','),
-    skips: skipCount,
-    answerDetails: JSON.stringify(answers.map(a => ({q:a.question, cat:a.category, time:a.responseTime, scene:a.scene}))),
-    ua: navigator.userAgent
+    reportUrl: reportUrl
   };
   try {
-    const res = await fetch(GAS_URL, {method:'POST', body:JSON.stringify(payload), redirect:'follow'});
-    const text = await res.text();
-    const data = JSON.parse(text);
-    return data.docUrl || null;
+    await fetch(GAS_URL, {method:'POST', body:JSON.stringify(payload), redirect:'follow'});
   } catch(e) {
     try { await fetch(GAS_URL, {method:'POST', mode:'no-cors', body:JSON.stringify(payload)}); } catch(e2){}
-    return null;
   }
 }
 
@@ -519,8 +509,9 @@ async function showAnalyzing() {
   const scores = calcScores();
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const topCat = CATEGORIES[sorted[0][0]];
+  const reportUrl = generateShareUrl(scores);
 
-  submitToGAS(scores, topCat).catch(() => {});
+  submitToGAS(reportUrl).catch(() => {});
   await playAnimation();
   showResults(scores, topCat);
 }
