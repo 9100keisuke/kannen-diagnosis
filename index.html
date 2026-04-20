@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>観念診断 — あなたの心のクセを見つける</title>
-<meta name="description" content="15の日常場面に答えるだけ。あなたが無意識に持っている「観念」のパターンを診断します。">
-<meta property="og:title" content="観念診断 — あなたの心のクセを見つける">
-<meta property="og:description" content="15の日常場面に答えるだけ。あなたが無意識に持っている「観念」を診断します。">
+<title>観念診断 — あなたの眠った強みが目覚めない原因</title>
+<meta name="description" content="あなたの眠った強みが目覚めない原因は「観念」にある。15の質問でその正体を明らかにします。">
+<meta property="og:title" content="観念診断 — あなたの眠った強みが目覚めない原因">
+<meta property="og:description" content="「〜しなきゃ」「〜してはいけない」という無意識の思い込みの正体を、15の質問で明らかにします。">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,13 +21,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .screen.active{display:flex;flex-direction:column}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-#landing{justify-content:center;align-items:center;text-align:center;padding:2rem;background:linear-gradient(135deg,#5B4FBE 0%,#8B7BD4 50%,#A78BFA 100%);color:#fff}
-#landing h1{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:800;margin-bottom:.5rem;letter-spacing:-.02em}
-#landing .subtitle{font-size:clamp(.95rem,2.5vw,1.15rem);opacity:.9;margin-bottom:2.5rem;line-height:1.8}
-#landing .lead{font-size:.9rem;opacity:.75;max-width:360px;margin:0 auto 2rem}
-.btn-start{background:#fff;color:var(--primary);border:none;padding:1rem 3rem;border-radius:60px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 8px 32px rgba(0,0,0,.15)}
-.btn-start:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.2)}
-.q-count{display:inline-block;background:rgba(255,255,255,.2);padding:.4rem 1rem;border-radius:20px;font-size:.85rem;margin-bottom:1.5rem}
+#landing{justify-content:center;align-items:center;text-align:center;padding:2rem;background:#0a0a1a;color:#fff;position:relative;overflow:hidden}
+#landing::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 0%,rgba(91,79,190,.5) 0%,transparent 50%),radial-gradient(ellipse at 85% 100%,rgba(26,188,156,.18) 0%,transparent 45%),radial-gradient(ellipse at 55% 50%,rgba(139,123,212,.12) 0%,transparent 55%);animation:nebula 15s ease-in-out infinite alternate;pointer-events:none}
+#landing>div{position:relative;z-index:1}
+#landing h1{font-size:clamp(1.4rem,4.5vw,2.1rem);font-weight:800;margin-bottom:1rem;letter-spacing:-.02em;line-height:1.6;text-shadow:0 0 40px rgba(167,139,250,.4),0 0 80px rgba(91,79,190,.2)}
+#landing h1 .accent{color:#c4b5fd;text-shadow:0 0 30px rgba(167,139,250,.8),0 0 60px rgba(167,139,250,.4),0 0 100px rgba(91,79,190,.3);font-size:1.15em}
+#landing .subtitle{font-size:clamp(.88rem,2.4vw,1.05rem);opacity:.85;margin-bottom:1.5rem;line-height:2.1}
+#landing .lead{font-size:.88rem;opacity:.55;max-width:360px;margin:0 auto 2.5rem}
+.btn-start{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.2);padding:1rem 3rem;border-radius:60px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .4s;box-shadow:0 0 30px rgba(167,139,250,.25),inset 0 0 30px rgba(167,139,250,.04);backdrop-filter:blur(12px);position:relative}
+.btn-start:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(167,139,250,.45),inset 0 0 30px rgba(167,139,250,.08);border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.1)}
+.btn-start::after{content:'';position:absolute;inset:-1px;border-radius:inherit;background:linear-gradient(135deg,rgba(167,139,250,.3),rgba(26,188,156,.2));z-index:-1;filter:blur(12px);opacity:.6;animation:btnGlow 4s ease-in-out infinite alternate}
+.q-count{display:inline-block;background:rgba(255,255,255,.08);padding:.4rem 1rem;border-radius:20px;font-size:.82rem;margin-bottom:1.5rem;border:1px solid rgba(255,255,255,.1);letter-spacing:.03em}
+@keyframes nebula{0%{opacity:.6;transform:scale(1) rotate(0deg)}100%{opacity:1;transform:scale(1.08) rotate(1.5deg)}}
+@keyframes btnGlow{0%{opacity:.4}100%{opacity:.8}}
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particles span{position:absolute;border-radius:50%;background:rgba(255,255,255,.6);box-shadow:0 0 6px 2px rgba(167,139,250,.3)}
+.particles span:nth-child(1){width:3px;height:3px;left:12%;top:18%;animation:pf 8s ease-in-out infinite}
+.particles span:nth-child(2){width:5px;height:5px;left:28%;top:65%;animation:pf 12s ease-in-out 2s infinite}
+.particles span:nth-child(3){width:2px;height:2px;left:48%;top:12%;animation:pf 10s ease-in-out 4s infinite}
+.particles span:nth-child(4){width:4px;height:4px;left:68%;top:72%;animation:pf 9s ease-in-out 1s infinite}
+.particles span:nth-child(5){width:2px;height:2px;left:82%;top:28%;animation:pf 11s ease-in-out 3s infinite}
+.particles span:nth-child(6){width:6px;height:6px;left:38%;top:82%;animation:pf 14s ease-in-out 5s infinite;background:rgba(26,188,156,.35);box-shadow:0 0 10px 4px rgba(26,188,156,.15)}
+.particles span:nth-child(7){width:2px;height:2px;left:58%;top:42%;animation:pf 7s ease-in-out 2.5s infinite}
+.particles span:nth-child(8){width:3px;height:3px;left:92%;top:55%;animation:pf 13s ease-in-out 6s infinite}
+.particles span:nth-child(9){width:8px;height:8px;left:5%;top:50%;animation:pf 16s ease-in-out 1.5s infinite;background:rgba(139,123,212,.2);box-shadow:0 0 20px 8px rgba(139,123,212,.1);filter:blur(2px)}
+.particles span:nth-child(10){width:10px;height:10px;left:75%;top:15%;animation:pf 18s ease-in-out 4.5s infinite;background:rgba(91,79,190,.15);box-shadow:0 0 25px 10px rgba(91,79,190,.08);filter:blur(3px)}
+@keyframes pf{0%,100%{transform:translateY(0) translateX(0);opacity:.15}20%{opacity:.9}50%{transform:translateY(-40px) translateX(15px);opacity:.35}80%{opacity:.8}}
 
 #name-input{justify-content:center;align-items:center;padding:2rem;background:var(--bg)}
 .name-wrap{background:var(--card);border-radius:24px;padding:2.5rem 2rem;box-shadow:var(--shadow);max-width:420px;width:100%;text-align:center}
@@ -58,14 +77,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .btn-skip:hover{border-color:var(--primary-light);color:var(--primary)}
 .btn-skip:disabled{opacity:.3;cursor:default}
 
-#analyzing{justify-content:center;align-items:center;text-align:center;padding:2rem;background:linear-gradient(135deg,#5B4FBE,#8B7BD4)}
-.analyzing-spinner{width:64px;height:64px;border:4px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:1.5rem}
+#analyzing{justify-content:center;align-items:center;text-align:center;padding:2rem;background:#0a0a1a;position:relative;overflow:hidden}
+#analyzing::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(91,79,190,.4) 0%,transparent 60%),radial-gradient(ellipse at 30% 80%,rgba(26,188,156,.15) 0%,transparent 40%);animation:nebula 12s ease-in-out infinite alternate;pointer-events:none}
+#analyzing>div{position:relative;z-index:1}
+.analyzing-spinner{width:64px;height:64px;border:3px solid rgba(167,139,250,.2);border-top-color:rgba(167,139,250,.9);border-radius:50%;animation:spin 1.2s linear infinite;margin-bottom:1.5rem;filter:drop-shadow(0 0 12px rgba(167,139,250,.5))}
 @keyframes spin{to{transform:rotate(360deg)}}
-#analyzing p{color:#fff;font-size:1rem;opacity:.9;transition:opacity .3s}
+#analyzing p{color:#fff;font-size:1rem;opacity:.85;transition:opacity .3s;text-shadow:0 0 20px rgba(167,139,250,.3)}
 
 #results{padding:0;background:var(--bg)}
-.result-hero{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;padding:2.5rem 1.5rem 3rem;text-align:center}
-.result-hero .tag{display:inline-block;background:rgba(255,255,255,.2);padding:.3rem 1rem;border-radius:20px;font-size:.8rem;margin-bottom:1rem}
+.result-hero{background:linear-gradient(180deg,#0a0a1a 0%,#1a1035 60%,var(--primary-dark) 100%);color:#fff;padding:2.5rem 1.5rem 3rem;text-align:center;position:relative}
+.result-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(167,139,250,.2) 0%,transparent 60%);pointer-events:none}
+.result-hero .tag{display:inline-block;background:rgba(255,255,255,.1);padding:.3rem 1rem;border-radius:20px;font-size:.8rem;margin-bottom:1rem;border:1px solid rgba(255,255,255,.15);position:relative}
+.result-hero h2,.result-hero .type-name{position:relative;text-shadow:0 0 30px rgba(167,139,250,.3)}
 .result-hero h2{font-size:clamp(1.4rem,4.5vw,2rem);font-weight:800;margin-bottom:.3rem}
 .result-hero .type-name{font-size:clamp(1.1rem,3.5vw,1.5rem);opacity:.9;font-weight:500}
 .result-body{padding:1.5rem;max-width:640px;margin:0 auto}
@@ -101,11 +124,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .rt-bar-outer{height:8px;background:#E8E6F0;border-radius:4px;overflow:hidden}
 .rt-bar-inner{height:100%;border-radius:4px;transition:width .6s ease}
 
-.doc-section{background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:20px;padding:2rem 1.5rem;text-align:center;margin:1.5rem 0 2rem;color:#fff}
-.doc-text{font-size:1rem;font-weight:600;margin-bottom:1rem;opacity:.95}
-.btn-doc{display:inline-block;background:#fff;color:var(--primary);padding:.85rem 2rem;border-radius:60px;font-size:1rem;font-weight:700;text-decoration:none;transition:all .3s;box-shadow:0 4px 16px rgba(0,0,0,.1)}
-.btn-doc:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
-.doc-hint{font-size:.78rem;opacity:.7;margin-top:.8rem}
+.doc-section{background:linear-gradient(135deg,#1a1035,#0d1b2a);border:1px solid rgba(167,139,250,.15);border-radius:20px;padding:2rem 1.5rem;text-align:center;margin:1.5rem 0 2rem;color:#fff;box-shadow:0 0 40px rgba(91,79,190,.1)}
+.doc-text{font-size:1rem;font-weight:600;margin-bottom:1rem;opacity:.9;text-shadow:0 0 15px rgba(167,139,250,.2)}
+.btn-doc{display:inline-block;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2);padding:.85rem 2rem;border-radius:60px;font-size:1rem;font-weight:700;text-decoration:none;transition:all .4s;box-shadow:0 0 25px rgba(167,139,250,.2);backdrop-filter:blur(10px);cursor:pointer}
+.btn-doc:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(167,139,250,.4);border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.12)}
+.doc-hint{font-size:.78rem;opacity:.6;margin-top:.8rem}
 
 .result-footer{text-align:center;padding:1.5rem 1rem 3rem;font-size:.78rem;color:var(--text-light)}
 </style>
@@ -113,11 +136,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 <body>
 
 <section id="landing" class="screen active">
+  <div class="particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <div>
     <div class="q-count">全15問 / 約3分</div>
-    <h1>あなたの「隠れた観念」診断</h1>
-    <p class="subtitle">日常の場面で、あなたの心が<br>無意識に選んでいるパターンを見つけます</p>
-    <p class="lead">「~しなきゃ」「~してはいけない」<br>その思い込みの正体を、15の質問で明らかにします</p>
+    <h1>あなたの眠った強みが<br>目覚めない原因である<br><span class="accent">「観念」</span>診断</h1>
+    <p class="subtitle">なぜあなたの眠った強みが目覚めないのか。<br>その原因はすべて<br>「〜しなきゃ」「〜してはいけない」という<br>無意識の思い込み（観念）があるからです。</p>
+    <p class="lead">その観念の正体を、15の質問で明らかにします。</p>
     <button class="btn-start" onclick="startQuiz()">診断をはじめる</button>
   </div>
 </section>
@@ -172,9 +196,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
       <div id="rt-bars"></div>
     </div>
     <div class="doc-section" id="doc-section" style="display:none">
-      <p class="doc-text">あなた専用の診断レポートが作成されました</p>
-      <a href="#" id="doc-link" class="btn-doc" target="_blank">レポートを開く</a>
-      <p class="doc-hint">このリンクを保存しておくと、いつでも結果を確認できます</p>
+      <p class="doc-text">あなた専用の診断レポートです</p>
+      <button class="btn-doc" id="btn-copy" onclick="copyShareUrl()">結果リンクをコピー</button>
+      <p class="doc-hint" id="copy-hint">このリンクを保存・共有すると、いつでも結果を確認できます</p>
     </div>
   </div>
   <div class="result-footer">観念診断 by Keisuke</div>
@@ -310,16 +334,16 @@ const RESERVE = [
 const CATEGORIES = {
   A:{id:"A",name:"存在価値系",typeName:"「条件付きの自分」",color:"#E74C3C",
     desc:"あなたは「何かができる自分」「何かを持っている自分」でないと価値がない、と無意識に信じている傾向があります。ありのままの自分に存在価値を感じにくく、常に「自分は足りているか？」という問いが心の中で回っています。",
-    kannen:["人に役に立たないといけない","価値を生み出さないといけない","そのままではいけない","特別な能力やスキルがないといけない","成果を出さないと認めてもらえない","何かを持っていないと愛されない","自分には価値がない"]},
+    kannen:["人に役に立たないといけない","価値を生み出さないといけない","そのままではいけない","特別な能力やスキルがないといけない","成果を出さないと認めてもらえない","何かを持っていないと愛されない","自分には価値がない","そのままでは愛されない","そのままでは受け入れられない"]},
   B:{id:"B",name:"対人関係系",typeName:"「透明な自分」",color:"#3498DB",
     desc:"あなたは他者との関係の中で、自分を消すことで安全を守ろうとする傾向があります。「嫌われたくない」「迷惑をかけたくない」が行動の基準になり、自分の意志よりも周囲の空気を優先してしまいます。",
-    kannen:["迷惑をかけちゃいけない","人に嫌われてはいけない","空気を読まないといけない","相手の期待に応えないといけない","NOと言ってはいけない","人の気持ちを優先しないといけない","自分の意見を主張してはいけない"]},
+    kannen:["迷惑をかけちゃいけない","人に嫌われてはいけない","空気を読まないといけない","相手の期待に応えないといけない","NOと言ってはいけない","人の気持ちを優先しないといけない","自分の意見を主張してはいけない","気遣いがないといけない"]},
   C:{id:"C",name:"努力・行動系",typeName:"「止まれない自分」",color:"#F39C12",
     desc:"あなたは「頑張り続けること」で自分の居場所を確保しようとする傾向があります。休むこと、楽をすること、手を抜くことに強い罪悪感を感じ、常に「もっとやらなきゃ」というエンジンが回り続けています。",
     kannen:["頑張らないといけない","真面目に生きないといけない","完璧にやらないといけない","責任を果たさないといけない","休んではいけない","楽をしてはいけない","途中でやめてはいけない"]},
   D:{id:"D",name:"感情・自己表現系",typeName:"「仮面の自分」",color:"#9B59B6",
     desc:"あなたは本当の感情を表に出すことに強い抵抗を持っています。弱さ、怒り、悲しみ、喜びさえも「見せてはいけないもの」として抑え込み、常に「大丈夫な自分」を演じ続ける傾向があります。",
-    kannen:["弱さを見せてはいけない","泣いてはいけない","怒ってはいけない","本音を言ってはいけない","助けを求めてはいけない"]},
+    kannen:["弱さを見せてはいけない","泣いてはいけない","怒ってはいけない","本音を言ってはいけない","助けを求めてはいけない","本音を出してはいけない"]},
   E:{id:"E",name:"可能性・変化系",typeName:"「檻の中の自分」",color:"#1ABC9C",
     desc:"あなたは自分の可能性に天井を設けてしまう傾向があります。「どうせ自分には無理」「変わりたくても変われない」という思い込みが、新しい挑戦や変化へのブレーキになっています。",
     kannen:["自分はできない","自分には才能がない","自信がないといけない","失敗してはいけない","自分が変わるのは難しい","幸せになってはいけない","お金を稼ぐのは悪いことだ"]}
@@ -335,7 +359,7 @@ let skipCount = 0;
 const MAX_SKIPS = 5;
 let qStartTime = 0;
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxsuy7oy4aIkUCUtGYYSBQ6P0CY8MIP86eVKiICLYQPIVIOViU7RFQ-w_hSMfbMlI4/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwM9BMrS4KDVuVSet7fQ3zngtT_2WM-QufRI4tPS7Q34I-ZZylHVnCRPqjETKWquHHp/exec";
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -491,27 +515,12 @@ async function showAnalyzing() {
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const topCat = CATEGORIES[sorted[0][0]];
 
-  const gasPromise = submitToGAS(scores, topCat);
+  submitToGAS(scores, topCat).catch(() => {});
   await playAnimation();
-
-  const msgEl = document.getElementById('analyze-msg');
-  msgEl.style.opacity = 0;
-  setTimeout(() => {
-    if (!document.getElementById('results').classList.contains('active')) {
-      msgEl.textContent = 'レポートを仕上げています...';
-      msgEl.style.opacity = 1;
-    }
-  }, 200);
-
-  const docUrl = await Promise.race([
-    gasPromise,
-    new Promise(r => setTimeout(() => r(null), 25000))
-  ]);
-
-  showResults(scores, topCat, docUrl);
+  showResults(scores, topCat);
 }
 
-function showResults(scores, topCat, docUrl) {
+function showResults(scores, topCat) {
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const total = answers.length;
 
@@ -581,10 +590,8 @@ function showResults(scores, topCat, docUrl) {
       </div>`;
     }).join('');
 
-  if (docUrl) {
-    document.getElementById('doc-section').style.display = '';
-    document.getElementById('doc-link').href = docUrl;
-  }
+  window._shareUrl = generateShareUrl(scores);
+  document.getElementById('doc-section').style.display = '';
 }
 
 document.addEventListener('keydown', e => {
@@ -597,6 +604,51 @@ document.addEventListener('keydown', e => {
 document.getElementById('inp-full-name').addEventListener('keydown', e => {
   if (e.key === 'Enter') submitName();
 });
+
+function generateShareUrl(scores) {
+  const data = {
+    n: userName.fullName,
+    s: [scores.A, scores.B, scores.C, scores.D, scores.E],
+    a: answers.map(a => [a.question, a.category, +(a.responseTime.toFixed(1)), a.scene]),
+    sk: skipCount,
+    d: new Date().toISOString().split('T')[0]
+  };
+  return window.location.href.split('#')[0] + '#r=' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+}
+
+function copyShareUrl() {
+  if (!window._shareUrl) return;
+  navigator.clipboard.writeText(window._shareUrl).then(() => {
+    document.getElementById('btn-copy').textContent = 'コピーしました ✓';
+    document.getElementById('copy-hint').textContent = 'リンクをLINEやメッセージで送れます';
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = window._shareUrl;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    document.getElementById('btn-copy').textContent = 'コピーしました ✓';
+  });
+}
+
+(function() {
+  const h = window.location.hash;
+  if (!h.startsWith('#r=')) return;
+  try {
+    const d = JSON.parse(decodeURIComponent(escape(atob(h.slice(3)))));
+    userName = { lineName: '', fullName: d.n };
+    answers.length = 0;
+    d.a.forEach(a => answers.push({
+      question: a[0], category: a[1], responseTime: a[2], scene: a[3] || ('Q' + a[0])
+    }));
+    skipCount = d.sk || 0;
+    const scores = {A:d.s[0], B:d.s[1], C:d.s[2], D:d.s[3], E:d.s[4]};
+    const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+    document.title = d.n + ' さんの観念診断結果';
+    showResults(scores, CATEGORIES[sorted[0][0]]);
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
