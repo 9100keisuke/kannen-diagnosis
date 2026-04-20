@@ -11,6 +11,8 @@
 <meta property="og:title" content="観念診断 — あなたの眠った強みが目覚めない原因">
 <meta property="og:description" content="「〜しなきゃ」「〜してはいけない」という無意識の思い込みの正体を、15の質問で明らかにします。">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -202,8 +204,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
     </div>
     <div class="doc-section" id="doc-section" style="display:none">
       <p class="doc-text">あなた専用の診断レポートです</p>
-      <button class="btn-doc" id="btn-copy" onclick="copyShareUrl()">結果リンクをコピー</button>
-      <p class="doc-hint" id="copy-hint">このリンクを保存・共有すると、いつでも結果を確認できます</p>
+      <button class="btn-doc" id="btn-pdf" onclick="downloadPDF()">診断レポートをダウンロード</button>
+      <p class="doc-hint" id="pdf-hint">PDFファイルとして保存できます</p>
     </div>
   </div>
   <div class="result-footer">観念診断 by Keisuke</div>
@@ -612,20 +614,75 @@ function generateShareUrl(scores) {
   return window.location.href.split('#')[0] + '#r=' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
 }
 
-function copyShareUrl() {
-  if (!window._shareUrl) return;
-  navigator.clipboard.writeText(window._shareUrl).then(() => {
-    document.getElementById('btn-copy').textContent = 'コピーしました ✓';
-    document.getElementById('copy-hint').textContent = 'リンクをLINEやメッセージで送れます';
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = window._shareUrl;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    document.getElementById('btn-copy').textContent = 'コピーしました ✓';
-  });
+async function downloadPDF() {
+  const btn = document.getElementById('btn-pdf');
+  const hint = document.getElementById('pdf-hint');
+  btn.textContent = 'レポート生成中...';
+  btn.disabled = true;
+
+  try {
+    const resultsEl = document.getElementById('results');
+    const docSection = document.getElementById('doc-section');
+    const footer = resultsEl.querySelector('.result-footer');
+    docSection.style.display = 'none';
+    if (footer) footer.style.display = 'none';
+
+    const canvas = await html2canvas(resultsEl, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#F5F2FF',
+      width: resultsEl.scrollWidth,
+      height: resultsEl.scrollHeight,
+      windowWidth: 640
+    });
+
+    docSection.style.display = '';
+    if (footer) footer.style.display = '';
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const { jsPDF } = window.jspdf;
+    const pdfW = 210;
+    const margin = 10;
+    const contentW = pdfW - margin * 2;
+    const ratio = canvas.height / canvas.width;
+    const contentH = contentW * ratio;
+    const pageH = 297 - margin * 2;
+
+    if (contentH <= pageH) {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      pdf.addImage(imgData, 'JPEG', margin, margin, contentW, contentH);
+      pdf.save(`観念診断_${userName.fullName || '結果'}.pdf`);
+    } else {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const totalPages = Math.ceil(contentH / pageH);
+      for (let i = 0; i < totalPages; i++) {
+        if (i > 0) pdf.addPage();
+        const srcY = (i * pageH / contentH) * canvas.height;
+        const srcH = Math.min((pageH / contentH) * canvas.height, canvas.height - srcY);
+        const sliceCanvas = document.createElement('canvas');
+        sliceCanvas.width = canvas.width;
+        sliceCanvas.height = srcH;
+        const ctx = sliceCanvas.getContext('2d');
+        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
+        const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.92);
+        const sliceH = (srcH / canvas.height) * contentH;
+        pdf.addImage(sliceData, 'JPEG', margin, margin, contentW, sliceH);
+      }
+      pdf.save(`観念診断_${userName.fullName || '結果'}.pdf`);
+    }
+
+    btn.textContent = 'ダウンロード完了 ✓';
+    hint.textContent = 'PDFが保存されました';
+    setTimeout(() => {
+      btn.textContent = '診断レポートをダウンロード';
+      btn.disabled = false;
+      hint.textContent = 'PDFファイルとして保存できます';
+    }, 3000);
+  } catch (e) {
+    btn.textContent = '診断レポートをダウンロード';
+    btn.disabled = false;
+    hint.textContent = 'エラーが発生しました。もう一度お試しください';
+  }
 }
 
 (function() {
