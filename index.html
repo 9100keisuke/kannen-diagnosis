@@ -138,6 +138,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .doc-hint{font-size:.78rem;color:var(--text-light);opacity:.7;margin-top:.8rem}
 
 .result-footer{text-align:center;padding:1.5rem 1rem 3rem;font-size:.78rem;color:var(--text-dim)}
+
+.hero-score{display:inline-flex;align-items:center;justify-content:center;width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.4);margin:1rem auto .5rem;font-size:1.5rem;font-weight:800;color:#2D2645;position:relative;backdrop-filter:blur(4px)}
+.hero-score-label{font-size:.78rem;color:#5D5080;font-weight:500;position:relative}
+.score-overview{background:var(--card);border:1px solid var(--glass-border);border-radius:20px;padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1.5rem;backdrop-filter:blur(10px)}
+.score-row{margin-bottom:1rem}.score-row:last-child{margin-bottom:0}
+.score-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem}
+.score-row-name{font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:.4rem}
+.score-row-right{display:flex;align-items:center;gap:.5rem}
+.score-row-pct{font-size:.85rem;font-weight:700}
+.score-bar-bg{height:10px;background:rgba(123,104,238,.06);border-radius:5px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:5px;transition:width 1.2s cubic-bezier(.25,.8,.25,1)}
+.score-level{font-size:.68rem;font-weight:700;padding:.15rem .5rem;border-radius:6px;white-space:nowrap}
+.score-level.high{background:rgba(232,85,90,.1);color:var(--A)}
+.score-level.mid{background:rgba(232,148,58,.1);color:var(--C)}
+.score-level.low{background:rgba(44,184,154,.1);color:var(--E)}
+.detail-card{background:var(--card);border:1px solid var(--glass-border);border-radius:20px;padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1.2rem;backdrop-filter:blur(10px);overflow:hidden}
+.detail-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--glass-border)}
+.detail-circle{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#fff;flex-shrink:0}
+.detail-meta h3{font-size:1rem;font-weight:700;margin-bottom:.15rem;display:flex;align-items:center;gap:.4rem}
+.detail-meta .sub{font-size:.82rem;color:var(--text-light)}
+.detail-desc{font-size:.9rem;color:var(--text);line-height:1.85;margin-bottom:1rem}
+.detail-patterns{margin-bottom:1rem}
+.detail-patterns-title{font-size:.8rem;font-weight:600;color:var(--text-light);margin-bottom:.5rem;letter-spacing:.03em}
+.detail-pattern-item{font-size:.85rem;color:var(--text);padding:.35rem 0 .35rem 1.1rem;position:relative;line-height:1.65}
+.detail-pattern-item::before{content:'';position:absolute;left:0;top:.65rem;width:6px;height:6px;border-radius:50%}
+.detail-growth{background:rgba(123,104,238,.04);border-radius:12px;padding:1rem 1.2rem;border-left:3px solid var(--primary)}
+.detail-growth-title{font-size:.8rem;font-weight:700;color:var(--primary);margin-bottom:.3rem}
+.detail-growth p{font-size:.85rem;color:var(--text);line-height:1.75;margin:0}
+.detail-kannen{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem;padding-top:.8rem;border-top:1px dashed var(--glass-border)}
+.combo-section{background:linear-gradient(135deg,rgba(123,104,238,.05),rgba(44,184,154,.03));border:1px solid var(--glass-border);border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;backdrop-filter:blur(10px)}
+.combo-visual{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1rem}
+.combo-badge{padding:.4rem .8rem;border-radius:10px;font-size:.82rem;font-weight:700;color:#fff}
+.combo-plus{font-size:1.2rem;font-weight:700;color:var(--text-dim)}
+.combo-name{font-size:1.05rem;font-weight:700;color:var(--text);text-align:center;margin-bottom:.5rem}
+.combo-desc{font-size:.9rem;color:var(--text);line-height:1.85;margin:0}
+.insight-card{background:linear-gradient(135deg,#F0EBFF,#E8F4FD);border:1px solid var(--glass-border);border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.insight-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.8rem;text-align:center}
+.insight-text{font-size:.9rem;color:var(--text);line-height:1.85}
+.reliability-section{background:var(--card);border:1px solid var(--glass-border);border-radius:16px;padding:1.2rem;margin-bottom:1.5rem;backdrop-filter:blur(10px)}
+.reliability-title{font-size:.85rem;font-weight:600;color:var(--text-light);margin-bottom:.6rem}
+.reliability-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+.reliability-label{font-size:.8rem;color:var(--text-light);width:100px}
+.reliability-bar-bg{flex:1;height:6px;background:rgba(123,104,238,.06);border-radius:3px;overflow:hidden}
+.reliability-bar-fill{height:100%;border-radius:3px;background:var(--primary)}
+.reliability-val{font-size:.78rem;font-weight:600;color:var(--primary);width:40px;text-align:right}
 </style>
 </head>
 <body>
@@ -193,15 +238,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
     <div class="tag">診断結果</div>
     <h2 id="result-title"></h2>
     <p class="type-name" id="result-subtitle"></p>
+    <div class="hero-score" id="hero-score"></div>
+    <p class="hero-score-label">影響度スコア</p>
   </div>
   <div class="result-body">
+    <h3 class="section-title">観念影響度スコア</h3>
+    <div class="score-overview" id="score-overview"></div>
     <div class="chart-wrap"><canvas id="radar-chart"></canvas></div>
-    <div id="cat-cards"></div>
+    <div id="combo-section"></div>
+    <h3 class="section-title">カテゴリ別 詳細分析</h3>
+    <div id="detail-cards"></div>
+    <div id="insight-section"></div>
     <h3 class="section-title">深層マップ — 無意識の反応速度</h3>
     <div id="depth-cards"></div>
     <div class="chart-wrap" id="rt-chart-wrap">
       <div id="rt-bars"></div>
     </div>
+    <div id="reliability-section"></div>
     <div class="doc-section" id="doc-section" style="display:none">
       <p class="doc-text">あなた専用の診断レポートです</p>
       <button class="btn-doc" id="btn-pdf" onclick="downloadPDF()">診断レポートをダウンロード</button>
@@ -355,6 +408,104 @@ const CATEGORIES = {
     desc:"あなたは自分の可能性に天井を設けてしまう傾向があります。「どうせ自分には無理」「変わりたくても変われない」という思い込みが、新しい挑戦や変化へのブレーキになっています。",
     kannen:["自分はできない","自分には才能がない","自信がないといけない","失敗してはいけない","自分が変わるのは難しい","幸せになってはいけない","お金を稼ぐのは悪いことだ"]}
 };
+
+const TIER_DESC = {
+  A:{
+    high:{level:"強い影響",lc:"high",
+      detail:"あなたの思考・行動の根底に「このままの自分では足りない」という信念が深く根付いています。成果・評価・肩書きなど外側の条件で自分の価値を測り続け、休むことや「何もしない時間」に強い罪悪感を感じる傾向があります。",
+      patterns:["褒められても素直に受け取れず「まだまだ」と感じる","何もしていない休日に焦りや罪悪感を覚える","他者の成功を見ると、自分と比較して落ち込む","「何者かにならなければ」という漠然としたプレッシャーが常にある"],
+      growth:"「何もしていない自分にも価値がある」——この言葉を口にしてみてください。違和感があるなら、それ自体がこの観念の強さを物語っています。まずその違和感に気づくことが、変化の第一歩です。"},
+    mid:{level:"やや影響",lc:"mid",
+      detail:"存在価値に関する観念は、特定の場面で顔を出す程度です。普段は穏やかですが、仕事の評価や他者との比較が発生する場面で「自分は足りているか？」という問いが浮かびやすい傾向があります。",
+      patterns:["評価される場面で自己肯定感が揺らぎやすい","SNSなどで比較対象を見ると気持ちが揺れることがある"],
+      growth:"評価が気になった瞬間を、ただ観察してみてください。「あ、今この観念が動いたな」と気づけるだけで、観念の影響力は自然と弱まっていきます。"},
+    low:{level:"軽い影響",lc:"low",
+      detail:"存在価値に関する観念は比較的軽い影響にとどまっています。ありのままの自分に一定の安心感を持てており、外部の評価に過度に振り回されにくい状態です。",
+      patterns:[],
+      growth:"この領域は安定しています。「自分のままでいい」という感覚を、他の領域にも広げていけます。"}
+  },
+  B:{
+    high:{level:"強い影響",lc:"high",
+      detail:"あなたは人間関係の中で「自分を消すこと」で安全を確保しようとする傾向が非常に強く出ています。「嫌われたくない」「迷惑をかけたくない」が行動の最優先基準になり、自分の意志や欲求は常に後回しにされます。",
+      patterns:["「NO」と言うことに強い抵抗を感じる","自分の意見より場の空気を読んで合わせてしまう","誰かの機嫌が悪いと「自分のせいかも」と感じる","人に頼みごとをするのが極端に苦手"],
+      growth:"「迷惑をかけること」と「頼ること」は別物です。小さなことから人に頼む練習をしてみてください。「迷惑かな」と感じた瞬間こそ、この観念が作動しているサインです。"},
+    mid:{level:"やや影響",lc:"mid",
+      detail:"対人関係における観念は、親しい関係や職場など特定の場面で現れます。基本的には自分の意見を持てていますが、衝突が予想される場面では無意識に自分を抑える傾向があります。",
+      patterns:["意見の衝突を避けるために自分を抑えることがある","断るとき必要以上に理由を説明してしまう"],
+      growth:"「相手のためではなく、自分のために」という視点で一つ選択してみてください。その小さな実験が、関係性の質を変える鍵になります。"},
+    low:{level:"軽い影響",lc:"low",
+      detail:"対人関係における観念の影響は小さく、比較的自分の意志で行動を選べている状態です。他者の期待に過度に縛られず、健全な距離感を保てる傾向があります。",
+      patterns:[],
+      growth:"この領域の安定感を活かして、周囲の人が本音を言いやすい環境を作る側に回ることもできます。"}
+  },
+  C:{
+    high:{level:"強い影響",lc:"high",
+      detail:"「頑張り続けること」があなたの生存戦略になっています。休むこと・手を抜くこと・楽をすることに強い罪悪感を感じ、「もっとやらなきゃ」というエンジンが常に回り続けている状態です。完璧主義と結びつきやすく、燃え尽きのリスクを抱えています。",
+      patterns:["休みの日でも「何かやらなきゃ」と落ち着かない","他の人が楽をしているのを見るとモヤッとする","80%の出来では満足できず常に100%を目指す","「サボっている」と思われることへの恐怖がある"],
+      growth:"「頑張らなかった日」を意図的に作ってみてください。何も生産しなかった翌日、世界は何も変わっていないはずです。その体験が「頑張らなくても大丈夫」という新しい回路を作ります。"},
+    mid:{level:"やや影響",lc:"mid",
+      detail:"努力・行動に関する観念は中程度です。メリハリをつけられる場面もありますが、忙しい時期や責任が増えた場面では「止まれないモード」に入りやすい傾向があります。",
+      patterns:["忙しさが続くと「止まったら負け」という感覚が出る","タスクが終わるとすぐ次のことを探してしまう"],
+      growth:"「余白」を予定に入れてみてください。何もしない時間をあえてスケジュールに組み込むことで、努力と休息のバランスが取りやすくなります。"},
+    low:{level:"軽い影響",lc:"low",
+      detail:"努力に関する観念の影響は小さく、自分のペースで行動を調整できている状態です。無理な頑張りに自分を追い込みにくく、比較的健全なワークバランスを保てる傾向があります。",
+      patterns:[],
+      growth:"この柔軟さはあなたの強みです。周囲の「頑張りすぎている人」に、休むことの大切さを伝えられる立場にいます。"}
+  },
+  D:{
+    high:{level:"強い影響",lc:"high",
+      detail:"あなたは感情を表に出すことに強い抵抗を持っています。弱さ・怒り・悲しみ、時には喜びさえも「見せてはいけないもの」として抑え込み、常に「大丈夫な自分」を演じ続けています。感情を抑えるエネルギーが、知らず知らずのうちに消耗を生んでいます。",
+      patterns:["「大丈夫？」と聞かれると反射的に「大丈夫」と答える","泣くことや怒ることに罪悪感を感じる","本当に辛い時ほど平気なフリをしてしまう","「助けて」の一言がなかなか出てこない"],
+      growth:"まず「自分の気持ちを自分だけに正直に言う」練習から始めてみてください。ノートに「本当は今こう感じている」と書くだけでも、感情の出口ができます。"},
+    mid:{level:"やや影響",lc:"mid",
+      detail:"感情表現に関する観念は中程度です。信頼できる相手には本音を見せられますが、それ以外の場面では感情にフタをする傾向があります。「弱さを見せたら終わり」という感覚が時折顔を出します。",
+      patterns:["親しい人以外には感情を見せにくい","感情的になった後に恥ずかしさや後悔を感じることがある"],
+      growth:"感情を出せる「安全な場所」を意識的に増やしてみてください。本音を言える相手が一人でもいることが、この観念を緩める大きな力になります。"},
+    low:{level:"軽い影響",lc:"low",
+      detail:"感情表現における観念の影響は小さく、比較的自然に自分の気持ちを表現できている状態です。感情を抑え込むことが少なく、心理的なエネルギーの消耗も少ない傾向があります。",
+      patterns:[],
+      growth:"感情を自然に出せることは、周囲の人の安心感にもつながっています。その姿が、他の人の仮面を外すきっかけになることもあります。"}
+  },
+  E:{
+    high:{level:"強い影響",lc:"high",
+      detail:"あなたは自分の可能性に無意識の天井を設けています。「どうせ無理」「自分にはできない」という思い込みが、新しい挑戦への強力なブレーキになっています。変化を恐れ現状維持を選び続けることで、本来持っている力が発揮されずにいます。",
+      patterns:["やりたいことがあっても「自分には無理」が先に来る","新しいことを始める前に失敗するイメージが膨らむ","成功している人を見て「あの人は特別」と線を引く","「変わりたい」と思いつつ同じ日常を繰り返している"],
+      growth:"「できるかどうか」ではなく「やってみたいかどうか」で一つだけ選んでみてください。結果はどうでもいい。「自分で選んだ」という事実が、檻のドアを開ける最初の一歩です。"},
+    mid:{level:"やや影響",lc:"mid",
+      detail:"可能性に関する観念は中程度です。得意な分野では挑戦できますが、未知の領域や大きな変化が求められる場面ではブレーキがかかりやすい傾向があります。",
+      patterns:["慣れた分野では動けるが新領域に踏み出しにくい","「失敗したらどうしよう」が行動前に浮かぶことがある"],
+      growth:"「小さく試す」を合言葉にしてみてください。100%の結果を目指さず1%だけやってみる。その小さな行動が「自分にもできた」という証拠になります。"},
+    low:{level:"軽い影響",lc:"low",
+      detail:"可能性に関する観念の影響は小さく、新しいことへの挑戦に比較的抵抗が少ない状態です。「やればできるかもしれない」という感覚を持てている領域です。",
+      patterns:[],
+      growth:"この前向きさは大きな強みです。ただし時に「根拠なき楽観」になっていないか、立ち止まって確認する時間も大切にしてください。"}
+  }
+};
+
+const COMBO_DESC = {
+  AB:{name:"承認渇望型",desc:"他者の評価で自分の価値を測りながら、同時に嫌われることを恐れています。「認められたい、でも出すぎてはいけない」という矛盾した力が、あなたを消耗させています。"},
+  AC:{name:"燃焼証明型",desc:"「頑張り続けること」で自分の存在価値を証明しようとしています。成果を出し続けないと自分を許せず、休むことが怖い。燃え尽きる前に、この回路に気づくことが重要です。"},
+  AD:{name:"鎧の成果主義型",desc:"自分の価値を証明するために走り続けながら、感情という最も人間的な部分を隠しています。「弱さを見せたら価値が下がる」——この二重の鎧が、あなたを孤独にしています。"},
+  AE:{name:"自己制限型",desc:"「自分には価値がない」と感じながら「でも変われない」と天井を設けています。この2つが結びつくと、行動する前から諦めてしまう強力なブレーキになります。"},
+  BC:{name:"献身疲弊型",desc:"人に迷惑をかけないよう全力で頑張り続けています。「誰かのために」が行動原理になり、自分のための時間やエネルギーが慢性的に枯渇しやすい状態です。"},
+  BD:{name:"透明仮面型",desc:"人間関係で自分を消しながら、同時に本音を隠しています。「嫌われたくない×本音を出してはいけない」の二重ロックが、あなたの本当の魅力を封じ込めています。"},
+  BE:{name:"関係性制限型",desc:"人との関わりの中で自分を抑え、同時に「どうせ自分は」と可能性に蓋をしています。周囲に合わせながら自分を小さくする、静かな自己否定のパターンです。"},
+  CD:{name:"完璧演技型",desc:"頑張っている姿を見せながら、疲れている本音は絶対に見せない。完璧な自分を演じ続けることで「できる人」と映りますが、内側では消耗が蓄積しています。"},
+  CE:{name:"努力と諦めの矛盾型",desc:"「頑張らなきゃ」と「どうせ無理」が同時に存在する矛盾した状態です。アクセルとブレーキを同時に踏んでいるため、大きなエネルギーを使いながら前に進めない感覚があるかもしれません。"},
+  DE:{name:"凍結型",desc:"感情を隠し、変化を恐れ、現状に留まり続けます。本当は変わりたいのに、感情を出すことも新しい一歩を踏み出すことも怖い。この静かな凍結状態が、あなたの本来の力を眠らせています。"}
+};
+
+function getTier(score, total) {
+  const pct = total > 0 ? score / total : 0;
+  if (pct >= 0.27) return 'high';
+  if (pct >= 0.14) return 'mid';
+  return 'low';
+}
+
+function getComboKey(id1, id2) {
+  const pair = [id1, id2].sort().join('');
+  return COMBO_DESC[pair] ? pair : null;
+}
 
 let userName = { lineName:'', fullName:'' };
 let currentQ = 0;
@@ -520,13 +671,34 @@ async function showAnalyzing() {
 
 function showResults(scores, topCat) {
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const total = answers.length;
+  const total = answers.length || Object.values(scores).reduce((s,v)=>s+v,0);
+  const topPct = total > 0 ? Math.round(sorted[0][1] / total * 100) : 0;
 
   document.getElementById('result-title').textContent = 'あなたの主要な観念パターン';
   document.getElementById('result-subtitle').textContent = `${topCat.name} ${topCat.typeName}`;
+  document.getElementById('hero-score').textContent = topPct;
 
   showScreen('results');
 
+  // Score Overview horizontal bars
+  document.getElementById('score-overview').innerHTML = sorted.map(([catId, score]) => {
+    const c = CATEGORIES[catId];
+    const pct = total > 0 ? Math.round(score / total * 100) : 0;
+    const tier = getTier(score, total);
+    const td = TIER_DESC[catId][tier];
+    return `<div class="score-row">
+      <div class="score-row-header">
+        <span class="score-row-name" style="color:${c.color}">${c.name}</span>
+        <div class="score-row-right">
+          <span class="score-row-pct" style="color:${c.color}">${pct}%</span>
+          <span class="score-level ${td.lc}">${td.level}</span>
+        </div>
+      </div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${c.color}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Radar chart
   const ctx = document.getElementById('radar-chart').getContext('2d');
   if (window._chart) window._chart.destroy();
   window._chart = new Chart(ctx, {
@@ -546,47 +718,119 @@ function showResults(scores, topCat) {
     }
   });
 
-  document.getElementById('cat-cards').innerHTML = sorted.map(([catId, score], i) => {
+  // Combination analysis
+  if (sorted.length >= 2) {
+    const ck = getComboKey(sorted[0][0], sorted[1][0]);
+    if (ck) {
+      const combo = COMBO_DESC[ck];
+      const c1 = CATEGORIES[sorted[0][0]], c2 = CATEGORIES[sorted[1][0]];
+      document.getElementById('combo-section').innerHTML = `
+        <h3 class="section-title">あなたの観念の掛け合わせ</h3>
+        <div class="combo-section">
+          <div class="combo-visual">
+            <span class="combo-badge" style="background:${c1.color}">${c1.name}</span>
+            <span class="combo-plus">&times;</span>
+            <span class="combo-badge" style="background:${c2.color}">${c2.name}</span>
+          </div>
+          <div class="combo-name">「${combo.name}」</div>
+          <p class="combo-desc">${combo.desc}</p>
+        </div>`;
+    }
+  }
+
+  // Detailed analysis cards
+  document.getElementById('detail-cards').innerHTML = sorted.map(([catId, score], i) => {
     const c = CATEGORIES[catId];
-    return `<div class="cat-card cat-${catId} ${i===0?'main':''}">
-      <h3>${i===0?'★ ':''}${c.name} ${c.typeName}<span class="score-badge">${score} / ${total}</span></h3>
-      <p>${c.desc}</p>
-      <div class="kannen-tags">${c.kannen.map(k=>`<span class="kannen-tag">${k}</span>`).join('')}</div>
+    const tier = getTier(score, total);
+    const td = TIER_DESC[catId][tier];
+    const pct = total > 0 ? Math.round(score / total * 100) : 0;
+    return `<div class="detail-card">
+      <div class="detail-header">
+        <div class="detail-circle" style="background:${c.color}">${pct}</div>
+        <div class="detail-meta">
+          <h3 style="color:${c.color}">${i===0?'<span style="margin-right:4px">★</span>':''}${c.name} ${c.typeName}</h3>
+          <div class="sub">${score} / ${total} 問が該当 ・ <span class="score-level ${td.lc}" style="display:inline;padding:2px 6px;font-size:.72rem">${td.level}</span></div>
+        </div>
+      </div>
+      <p class="detail-desc">${td.detail}</p>
+      ${td.patterns.length > 0 ? `<div class="detail-patterns">
+        <div class="detail-patterns-title">あなたに現れやすい行動パターン</div>
+        ${td.patterns.map(p => `<div class="detail-pattern-item" style="--dot-color:${c.color}"><span style="position:absolute;left:0;top:.65rem;width:6px;height:6px;border-radius:50%;background:${c.color}"></span>${p}</div>`).join('')}
+      </div>` : ''}
+      <div class="detail-growth">
+        <div class="detail-growth-title">変化への第一歩</div>
+        <p>${td.growth}</p>
+      </div>
+      <div class="detail-kannen">${c.kannen.map(k=>`<span class="kannen-tag">${k}</span>`).join('')}</div>
     </div>`;
   }).join('');
 
+  // Growth insight
+  const topTier = getTier(sorted[0][1], total);
+  const topTd = TIER_DESC[sorted[0][0]][topTier];
+  document.getElementById('insight-section').innerHTML = `
+    <div class="insight-card">
+      <div class="insight-title">あなたへのメッセージ</div>
+      <p class="insight-text">この診断結果は、あなたの無意識的な思考パターンの「傾向」を示すものです。良い悪いではなく、あなたがこれまでの人生で身につけてきた「生存戦略」の形です。<br><br><strong>観念は変えられます。</strong>まずは「自分がこういうパターンを持っている」と認識すること。それが変化の第一歩です。<br><br>あなたの最も強い観念「${topCat.name}」に対して——<br>${topTd.growth}</p>
+    </div>`;
+
+  // Deep map
   const sortedByTime = [...answers].sort((a, b) => a.responseTime - b.responseTime);
-  const fastest = sortedByTime[0];
-  const slowest = sortedByTime[sortedByTime.length - 1];
-  const maxTime = slowest.responseTime;
-  const sceneShort = s => s.length > 40 ? s.slice(0, 40) + '...' : s;
+  if (sortedByTime.length > 0) {
+    const fastest = sortedByTime[0];
+    const slowest = sortedByTime[sortedByTime.length - 1];
+    const maxTime = slowest.responseTime;
+    const sceneShort = s => s.length > 40 ? s.slice(0, 40) + '...' : s;
 
-  document.getElementById('depth-cards').innerHTML = `
-    <div class="depth-card depth-fastest">
-      <div class="depth-label">最も速く反応した場面</div>
-      <div class="depth-scene">${sceneShort(fastest.scene)}</div>
-      <div class="depth-cat">${CATEGORIES[fastest.category].name} ${CATEGORIES[fastest.category].typeName}</div>
-      <div class="depth-time" style="color:${CATEGORIES[fastest.category].color}">${fastest.responseTime.toFixed(1)}秒</div>
-      <div class="depth-hint">迷いなく選んだ = この観念が最も深く内面化されています</div>
-    </div>
-    <div class="depth-card depth-slowest">
-      <div class="depth-label">最も迷った場面</div>
-      <div class="depth-scene">${sceneShort(slowest.scene)}</div>
-      <div class="depth-cat">${CATEGORIES[slowest.category].name} ${CATEGORIES[slowest.category].typeName}</div>
-      <div class="depth-time" style="color:${CATEGORIES[slowest.category].color}">${slowest.responseTime.toFixed(1)}秒</div>
-      <div class="depth-hint">迷い = この観念を意識化し始めている段階かもしれません</div>
-    </div>
-  `;
-
-  document.getElementById('rt-bars').innerHTML = `<div style="font-size:.85rem;font-weight:600;margin-bottom:.8rem;color:var(--text-light)">全問の反応速度</div>` +
-    answers.map(a => {
-      const pct = Math.max((a.responseTime / maxTime) * 100, 8);
-      const c = CATEGORIES[a.category];
-      return `<div class="rt-bar-wrap">
-        <div class="rt-bar-label"><span>Q${a.question} ${c.name}</span><span>${a.responseTime.toFixed(1)}秒</span></div>
-        <div class="rt-bar-outer"><div class="rt-bar-inner" style="width:${pct}%;background:${c.color}"></div></div>
+    document.getElementById('depth-cards').innerHTML = `
+      <div class="depth-card depth-fastest">
+        <div class="depth-label">最も速く反応した場面</div>
+        <div class="depth-scene">${sceneShort(fastest.scene)}</div>
+        <div class="depth-cat">${CATEGORIES[fastest.category].name} ${CATEGORIES[fastest.category].typeName}</div>
+        <div class="depth-time" style="color:${CATEGORIES[fastest.category].color}">${fastest.responseTime.toFixed(1)}秒</div>
+        <div class="depth-hint">迷いなく選んだ = この観念が最も深く内面化されています</div>
+      </div>
+      <div class="depth-card depth-slowest">
+        <div class="depth-label">最も迷った場面</div>
+        <div class="depth-scene">${sceneShort(slowest.scene)}</div>
+        <div class="depth-cat">${CATEGORIES[slowest.category].name} ${CATEGORIES[slowest.category].typeName}</div>
+        <div class="depth-time" style="color:${CATEGORIES[slowest.category].color}">${slowest.responseTime.toFixed(1)}秒</div>
+        <div class="depth-hint">迷い = この観念を意識化し始めている段階かもしれません</div>
       </div>`;
-    }).join('');
+
+    document.getElementById('rt-bars').innerHTML = `<div style="font-size:.85rem;font-weight:600;margin-bottom:.8rem;color:var(--text-light)">全問の反応速度</div>` +
+      answers.map(a => {
+        const pct = Math.max((a.responseTime / maxTime) * 100, 8);
+        const c = CATEGORIES[a.category];
+        return `<div class="rt-bar-wrap">
+          <div class="rt-bar-label"><span>Q${a.question} ${c.name}</span><span>${a.responseTime.toFixed(1)}秒</span></div>
+          <div class="rt-bar-outer"><div class="rt-bar-inner" style="width:${pct}%;background:${c.color}"></div></div>
+        </div>`;
+      }).join('');
+  }
+
+  // Reliability section
+  const catCounts = {};
+  answers.forEach(a => { catCounts[a.category] = (catCounts[a.category]||0) + 1; });
+  const variance = Object.values(scores).reduce((s,v) => s + Math.pow(v - total/5, 2), 0) / 5;
+  const consistency = Math.min(Math.round((variance / Math.max(total/5, 1)) * 25 + 50), 99);
+  const avgTime = answers.length > 0 ? answers.reduce((s,a) => s+a.responseTime, 0) / answers.length : 0;
+  const concentration = Math.min(Math.round(Math.max(100 - avgTime * 5, 30)), 95);
+  document.getElementById('reliability-section').innerHTML = `
+    <div class="reliability-section">
+      <div class="reliability-title">診断の信頼性指標</div>
+      <div class="reliability-row">
+        <span class="reliability-label">回答一貫性</span>
+        <div class="reliability-bar-bg"><div class="reliability-bar-fill" style="width:${consistency}%"></div></div>
+        <span class="reliability-val">${consistency}%</span>
+      </div>
+      <div class="reliability-row">
+        <span class="reliability-label">集中度</span>
+        <div class="reliability-bar-bg"><div class="reliability-bar-fill" style="width:${concentration}%"></div></div>
+        <span class="reliability-val">${concentration}%</span>
+      </div>
+      <div style="font-size:.75rem;color:var(--text-dim);margin-top:.5rem">回答のばらつきと反応速度から算出しています</div>
+    </div>`;
 
   window._shareUrl = generateShareUrl(scores);
   window._pdfScores = scores;
@@ -623,51 +867,108 @@ function buildPdfBlocks(scores, topCat) {
   const total = Object.values(scores).reduce((s,v) => s+v, 0);
   const name = userName.fullName || '回答者';
   const date = new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'long',day:'numeric'});
+  const topPct = total > 0 ? Math.round(sorted[0][1] / total * 100) : 0;
   const blocks = [];
 
-  blocks.push(wrap(`<div ${S}="text-align:center;padding:10px 0">
-    <div ${S}="font-size:11px;color:#7B68EE;font-weight:600;margin-bottom:6px">観念診断レポート</div>
+  // Header with score
+  blocks.push(wrap(`<div ${S}="text-align:center;padding:16px 0;background:linear-gradient(180deg,#f0ecff,#fff);border-radius:12px;margin-bottom:4px">
+    <div ${S}="font-size:11px;color:#7B68EE;font-weight:600;letter-spacing:.05em;margin-bottom:6px">観念診断レポート</div>
     <div ${S}="font-size:22px;font-weight:800;margin-bottom:4px">${name} さんの診断結果</div>
-    <div ${S}="font-size:15px;color:#6B6090">${topCat.name} ${topCat.typeName}</div>
-    <div ${S}="font-size:11px;color:#9E96B8;margin-top:6px">${date}</div>
+    <div ${S}="font-size:15px;color:#6B6090;margin-bottom:10px">${topCat.name} ${topCat.typeName}</div>
+    <div ${S}="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#7B68EE;color:#fff;font-size:1.3rem;font-weight:800;margin-bottom:4px">${topPct}</div>
+    <div ${S}="font-size:11px;color:#9E96B8">影響度スコア ・ ${date}</div>
   </div>`));
 
+  // Score overview bars
+  blocks.push(wrap(`<div ${S}="font-size:14px;font-weight:700;margin-bottom:10px">観念影響度スコア</div>
+    <div ${S}="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:14px 16px">
+    ${sorted.map(([k,v]) => {
+      const c = CATEGORIES[k];
+      const pct = total > 0 ? Math.max(Math.round(v/total*100), 3) : 3;
+      const tier = getTier(v, total);
+      const td = TIER_DESC[k][tier];
+      const lvlBg = tier==='high'?'rgba(232,85,90,.1)':tier==='mid'?'rgba(232,148,58,.1)':'rgba(44,184,154,.1)';
+      const lvlColor = tier==='high'?'#E8555A':tier==='mid'?'#E8943A':'#2CB89A';
+      return `<div ${S}="margin-bottom:10px">
+        <div ${S}="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <span ${S}="font-weight:600;color:${c.color};font-size:12px">${c.name}</span>
+          <span ${S}="font-size:10px;display:flex;align-items:center;gap:4px"><span ${S}="font-weight:700;color:${c.color}">${pct}%</span><span ${S}="background:${lvlBg};color:${lvlColor};padding:1px 6px;border-radius:4px;font-weight:700;font-size:9px">${td.level}</span></span>
+        </div>
+        <div ${S}="height:8px;background:#f0eef5;border-radius:4px;overflow:hidden"><div ${S}="height:100%;width:${pct}%;background:${c.color};border-radius:4px"></div></div>
+      </div>`;
+    }).join('')}
+    </div>`));
+
+  // Combination analysis
+  if (sorted.length >= 2) {
+    const ck = getComboKey(sorted[0][0], sorted[1][0]);
+    if (ck) {
+      const combo = COMBO_DESC[ck];
+      const c1 = CATEGORIES[sorted[0][0]], c2 = CATEGORIES[sorted[1][0]];
+      blocks.push(wrap(`<div ${S}="font-size:14px;font-weight:700;margin-bottom:10px">あなたの観念の掛け合わせ</div>
+        <div ${S}="background:#f8f6ff;border:1px solid #e8e4f0;border-radius:12px;padding:14px 16px;text-align:center">
+          <div ${S}="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px">
+            <span ${S}="background:${c1.color};color:#fff;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:700">${c1.name}</span>
+            <span ${S}="font-size:14px;font-weight:700;color:#bbb">&times;</span>
+            <span ${S}="background:${c2.color};color:#fff;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:700">${c2.name}</span>
+          </div>
+          <div ${S}="font-size:15px;font-weight:700;margin-bottom:6px">「${combo.name}」</div>
+          <p ${S}="font-size:12px;color:#555;line-height:1.7;margin:0;text-align:left">${combo.desc}</p>
+        </div>`));
+    }
+  }
+
+  // Detailed analysis per category
   sorted.forEach(([k,v], i) => {
     const c = CATEGORIES[k];
-    const pct = total > 0 ? Math.max(Math.round(v/total*100), 5) : 5;
-    let title = i === 0 ? `<div ${S}="font-size:14px;font-weight:700;margin-bottom:10px">カテゴリ別スコア</div>` : '';
+    const pct = total > 0 ? Math.max(Math.round(v/total*100), 3) : 3;
+    const tier = getTier(v, total);
+    const td = TIER_DESC[k][tier];
+    let title = i === 0 ? `<div ${S}="font-size:14px;font-weight:700;margin-bottom:10px">カテゴリ別 詳細分析</div>` : '';
+    const patternsHtml = td.patterns.length > 0 ? `
+      <div ${S}="margin:10px 0">
+        <div ${S}="font-size:10px;font-weight:600;color:#888;margin-bottom:6px;letter-spacing:.03em">あなたに現れやすい行動パターン</div>
+        ${td.patterns.map(p => `<div ${S}="font-size:11px;color:#444;padding:3px 0 3px 12px;line-height:1.6;position:relative"><span ${S}="position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:${c.color}"></span>${p}</div>`).join('')}
+      </div>` : '';
     blocks.push(wrap(`${title}<div ${S}="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:14px 16px;border-left:4px solid ${c.color}">
-      <div ${S}="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span ${S}="font-weight:700;color:${c.color};font-size:13px">${i===0?'★ ':''}${c.name} ${c.typeName}</span>
-        <span ${S}="font-size:11px;background:#f0eef5;padding:2px 8px;border-radius:8px;font-weight:600">${v} / ${total}</span>
+      <div ${S}="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f0eef5">
+        <div ${S}="width:44px;height:44px;border-radius:50%;background:${c.color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0">${pct}</div>
+        <div>
+          <div ${S}="font-weight:700;color:${c.color};font-size:13px">${i===0?'★ ':''}${c.name} ${c.typeName}</div>
+          <div ${S}="font-size:10px;color:#888">${v} / ${total} 問が該当 ・ ${td.level}</div>
+        </div>
       </div>
-      <div ${S}="height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-bottom:8px">
-        <div ${S}="height:100%;width:${pct}%;background:${c.color};border-radius:3px"></div>
+      <p ${S}="font-size:11px;color:#444;line-height:1.8;margin:0 0 8px">${td.detail}</p>
+      ${patternsHtml}
+      <div ${S}="background:#f8f6ff;border-radius:8px;padding:10px 12px;border-left:3px solid #7B68EE;margin-top:8px">
+        <div ${S}="font-size:10px;font-weight:700;color:#7B68EE;margin-bottom:3px">変化への第一歩</div>
+        <p ${S}="font-size:11px;color:#444;line-height:1.7;margin:0">${td.growth}</p>
       </div>
-      <p ${S}="font-size:12px;color:#555;line-height:1.7;margin:0 0 8px">${c.desc}</p>
-      <div ${S}="display:flex;flex-wrap:wrap;gap:4px">${c.kannen.map(k => `<span ${S}="font-size:10px;background:#f3f1ff;color:#5b4fbe;padding:2px 8px;border-radius:6px">・${k}</span>`).join('')}</div>
+      <div ${S}="display:flex;flex-wrap:wrap;gap:3px;margin-top:8px;padding-top:8px;border-top:1px dashed #e8e4f0">${c.kannen.map(kn => `<span ${S}="font-size:9px;background:#f3f1ff;color:#5b4fbe;padding:2px 7px;border-radius:5px">・${kn}</span>`).join('')}</div>
     </div>`));
   });
 
+  // Deep map
   if (answers.length > 0) {
     const byTime = [...answers].sort((a,b) => a.responseTime - b.responseTime);
     const fastest = byTime[0], slowest = byTime[byTime.length-1];
     const fC = CATEGORIES[fastest.category], sC = CATEGORIES[slowest.category];
     const maxT = slowest.responseTime;
 
-    blocks.push(wrap(`<div ${S}="font-size:14px;font-weight:700;margin-bottom:10px">深層マップ</div>
-      <div ${S}="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px;border-left:4px solid ${fC.color}">
+    blocks.push(wrap(`<div ${S}="font-size:14px;font-weight:700;margin-bottom:10px">深層マップ — 無意識の反応速度</div>
+      <div ${S}="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px;border-left:4px solid ${fC.color};margin-bottom:8px">
         <div ${S}="font-size:10px;font-weight:700;color:${fC.color};text-transform:uppercase;margin-bottom:4px">最も速く反応した場面</div>
         <div ${S}="font-size:12px;font-weight:600;line-height:1.5">${fastest.scene||'Q'+fastest.question}</div>
         <div ${S}="font-size:11px;color:#888">${fC.name}</div>
         <div ${S}="font-size:20px;font-weight:800;color:${fC.color};margin-top:2px">${fastest.responseTime.toFixed(1)}秒</div>
-      </div>`));
-
-    blocks.push(wrap(`<div ${S}="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px;border-left:4px solid ${sC.color}">
+        <div ${S}="font-size:10px;color:#999;font-style:italic;margin-top:2px">迷いなく選んだ = この観念が最も深く内面化されています</div>
+      </div>
+      <div ${S}="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px;border-left:4px solid ${sC.color}">
         <div ${S}="font-size:10px;font-weight:700;color:${sC.color};text-transform:uppercase;margin-bottom:4px">最も迷った場面</div>
         <div ${S}="font-size:12px;font-weight:600;line-height:1.5">${slowest.scene||'Q'+slowest.question}</div>
         <div ${S}="font-size:11px;color:#888">${sC.name}</div>
         <div ${S}="font-size:20px;font-weight:800;color:${sC.color};margin-top:2px">${slowest.responseTime.toFixed(1)}秒</div>
+        <div ${S}="font-size:10px;color:#999;font-style:italic;margin-top:2px">迷い = この観念を意識化し始めている段階かもしれません</div>
       </div>`));
 
     blocks.push(wrap(`<div ${S}="background:#fff;border:1px solid #e8e4f0;border-radius:12px;padding:12px 14px">
@@ -683,9 +984,14 @@ function buildPdfBlocks(scores, topCat) {
     </div>`));
   }
 
-  blocks.push(wrap(`<div ${S}="background:#f8f7ff;border-radius:12px;padding:16px;font-size:12px;color:#555;line-height:1.8">
-    <p>この診断結果は、あなたの無意識的な思考パターンの傾向を示すものです。</p>
+  // Message + footer
+  const topTier = getTier(sorted[0][1], total);
+  const topTd = TIER_DESC[sorted[0][0]][topTier];
+  blocks.push(wrap(`<div ${S}="background:#f8f7ff;border-radius:12px;padding:16px;font-size:12px;color:#444;line-height:1.8">
+    <div ${S}="font-weight:700;font-size:13px;margin-bottom:8px;color:#2D2645">あなたへのメッセージ</div>
+    <p>この診断結果は、あなたの無意識的な思考パターンの「傾向」を示すものです。良い悪いではなく、あなたがこれまでの人生で身につけてきた「生存戦略」の形です。</p>
     <p ${S}="margin-top:8px"><strong>観念は変えられます。</strong>まずは「自分がこういうパターンを持っている」と認識すること。それが変化の第一歩です。</p>
+    <p ${S}="margin-top:8px">あなたの最も強い観念「${topCat.name}」に対して——<br>${topTd.growth}</p>
   </div>
   <div ${S}="text-align:center;font-size:10px;color:#bbb;margin-top:12px">観念診断 by Keisuke</div>`));
 
