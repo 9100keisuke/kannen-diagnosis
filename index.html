@@ -79,6 +79,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .choice{background:var(--card);border:1px solid var(--glass-border);border-radius:14px;padding:1rem 1.2rem;cursor:pointer;transition:all .25s;font-size:.95rem;line-height:1.6;text-align:left;-webkit-tap-highlight-color:transparent;color:var(--text);backdrop-filter:blur(10px)}
 .choice:hover{border-color:rgba(123,104,238,.3);background:var(--card-hover);box-shadow:0 2px 12px rgba(123,104,238,.1)}
 .choice.selected{border-color:var(--primary);background:rgba(123,104,238,.1);transform:scale(.98);box-shadow:0 2px 18px rgba(123,104,238,.15)}
+.choice-positive{border-color:rgba(44,184,154,.25);background:rgba(44,184,154,.05);margin-top:.3rem}
+.choice-positive:hover{border-color:rgba(44,184,154,.4);background:rgba(44,184,154,.1)}
+.choice-positive.selected{border-color:#2CB89A;background:rgba(44,184,154,.15)}
 .choice-label{display:inline-block;width:1.5rem;height:1.5rem;line-height:1.5rem;text-align:center;border-radius:50%;background:var(--primary);color:#fff;font-size:.75rem;font-weight:700;margin-right:.6rem;flex-shrink:0;vertical-align:middle}
 .btn-skip{display:block;margin:1.2rem auto 0;background:none;border:1px solid rgba(123,104,238,.15);color:var(--text-light);padding:.5rem 1.5rem;border-radius:30px;font-size:.82rem;cursor:pointer;transition:all .2s}
 .btn-skip:hover{border-color:var(--primary);color:var(--primary)}
@@ -735,6 +738,7 @@ const answers = [];
 const activeQuestions = [...QUESTIONS];
 const reservePool = [...RESERVE];
 let skipCount = 0;
+let positiveCount = 0;
 let MAX_SKIPS = 5;
 let qStartTime = 0;
 
@@ -774,6 +778,7 @@ function selectMode(mode) {
   activeQuestions.length = 0;
   reservePool.length = 0;
   skipCount = 0;
+  positiveCount = 0;
   if (mode === 'full') {
     activeQuestions.push(...QUESTIONS, ...EXTRA_QUESTIONS);
     reservePool.push(...RESERVE, ...EXTRA_RESERVE);
@@ -790,8 +795,9 @@ function selectMode(mode) {
 function renderQuestion() {
   const q = activeQuestions[currentQ];
   const total = activeQuestions.length;
-  const pct = Math.round((totalAnswered / total) * 100);
-  document.getElementById('q-num').textContent = `Q${totalAnswered + 1} / ${total}`;
+  const presented = totalAnswered + positiveCount;
+  const pct = Math.round((presented / total) * 100);
+  document.getElementById('q-num').textContent = `Q${presented + 1} / ${total}`;
   document.getElementById('q-pct').textContent = `${pct}%`;
   document.getElementById('progress-fill').style.width = `${pct}%`;
 
@@ -803,7 +809,7 @@ function renderQuestion() {
 
   const canSkip = reservePool.length > 0 && skipCount < MAX_SKIPS;
   area.innerHTML = `
-    <div class="scene-label">Scene ${totalAnswered + 1}</div>
+    <div class="scene-label">Scene ${presented + 1}</div>
     <p class="scene-text">${q.scene}</p>
     <div class="choices">
       ${q.choices.map((c, i) => `
@@ -811,6 +817,9 @@ function renderQuestion() {
           <span class="choice-label">${labels[i]}</span>${c.text}
         </div>
       `).join('')}
+      <div class="choice choice-positive" onclick="selectPositive()" role="button" tabindex="0" aria-label="ポジティブな気持ち">
+        <span class="choice-label" style="background:#2CB89A;color:#fff">✦</span>素直にいい気分。特に引っかかることはない
+      </div>
     </div>
     ${canSkip ? `<button class="btn-skip" onclick="skipQuestion()">ピンとこない（別の場面に変える）</button>` : ''}
   `;
@@ -852,6 +861,25 @@ function skipQuestion() {
   const reserve = reservePool.shift();
   activeQuestions.splice(currentQ, 1, reserve);
   renderQuestion();
+}
+
+function selectPositive() {
+  const choiceEls = document.querySelectorAll('.choice');
+  choiceEls.forEach(el => el.style.pointerEvents = 'none');
+  const skipBtn = document.querySelector('.btn-skip');
+  if (skipBtn) skipBtn.disabled = true;
+  document.querySelector('.choice-positive').classList.add('selected');
+  setTimeout(() => {
+    positiveCount++;
+    currentQ++;
+    if (currentQ < activeQuestions.length) {
+      renderQuestion();
+    } else {
+      document.getElementById('progress-fill').style.width = '100%';
+      document.getElementById('q-pct').textContent = '100%';
+      showAnalyzing();
+    }
+  }, 400);
 }
 
 function playAnimation() {
@@ -1066,6 +1094,10 @@ function showResults(scores, topCat) {
         <div class="reliability-bar-bg"><div class="reliability-bar-fill" style="width:${concentration}%"></div></div>
         <span class="reliability-val">${concentration}%</span>
       </div>
+      ${positiveCount > 0 ? `<div class="reliability-row">
+        <span class="reliability-label">ポジティブ回答</span>
+        <span class="reliability-val" style="color:#2CB89A">${positiveCount}問</span>
+      </div>` : ''}
       <div style="font-size:.75rem;color:var(--text-dim);margin-top:.5rem">回答のばらつきと反応速度から算出しています</div>
     </div>`;
 
@@ -1099,6 +1131,7 @@ function generateShareUrl(scores) {
       return [a.question, a.category, +(a.responseTime.toFixed(1)), qi >= 0 ? qi : a.scene];
     }),
     sk: skipCount,
+    pc: positiveCount,
     d: new Date().toISOString().split('T')[0]
   };
   return window.location.href.split('#')[0] + '#r=' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
@@ -1310,6 +1343,7 @@ async function downloadPDF() {
       answers.push({ question: a[0], category: a[1], responseTime: a[2], scene });
     });
     skipCount = d.sk || 0;
+    positiveCount = d.pc || 0;
     const scores = {A:d.s[0], B:d.s[1], C:d.s[2], D:d.s[3], E:d.s[4]};
     const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
     document.title = d.n + ' さんの観念診断結果';
