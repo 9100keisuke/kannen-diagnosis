@@ -1087,7 +1087,9 @@ document.getElementById('inp-full-name').addEventListener('keydown', e => {
 });
 
 function generateShareUrl(scores) {
-  const allQ = quizMode === 'full' ? [...QUESTIONS, ...EXTRA_QUESTIONS] : QUESTIONS;
+  const allQ = quizMode === 'full'
+    ? [...QUESTIONS, ...EXTRA_QUESTIONS, ...RESERVE, ...EXTRA_RESERVE]
+    : [...QUESTIONS, ...RESERVE];
   const data = {
     n: userName.fullName,
     m: quizMode,
@@ -1298,7 +1300,9 @@ async function downloadPDF() {
     const d = JSON.parse(decodeURIComponent(escape(raw)));
     userName = { lineName: '', fullName: d.n };
     quizMode = d.m || 'quick';
-    const allQ = quizMode === 'full' ? [...QUESTIONS, ...EXTRA_QUESTIONS] : QUESTIONS;
+    const allQ = quizMode === 'full'
+      ? [...QUESTIONS, ...EXTRA_QUESTIONS, ...RESERVE, ...EXTRA_RESERVE]
+      : [...QUESTIONS, ...RESERVE];
     answers.length = 0;
     d.a.forEach(a => {
       const sceneRef = a[3];
