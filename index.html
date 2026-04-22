@@ -735,7 +735,7 @@ const answers = [];
 const activeQuestions = [...QUESTIONS];
 const reservePool = [...RESERVE];
 let skipCount = 0;
-const MAX_SKIPS = 5;
+let MAX_SKIPS = 5;
 let qStartTime = 0;
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyLQDTrFKsErA4Z5znf-z3SoD_abTiMO9wJuGtJwwOBb9hM7AU1wSpYEIj_rfdGR8O8/exec";
@@ -777,9 +777,11 @@ function selectMode(mode) {
   if (mode === 'full') {
     activeQuestions.push(...QUESTIONS, ...EXTRA_QUESTIONS);
     reservePool.push(...RESERVE, ...EXTRA_RESERVE);
+    MAX_SKIPS = 10;
   } else {
     activeQuestions.push(...QUESTIONS);
     reservePool.push(...RESERVE);
+    MAX_SKIPS = 5;
   }
   showScreen('quiz');
   renderQuestion();
@@ -805,7 +807,7 @@ function renderQuestion() {
     <p class="scene-text">${q.scene}</p>
     <div class="choices">
       ${q.choices.map((c, i) => `
-        <div class="choice" onclick="selectChoice(${i})" role="button" tabindex="0">
+        <div class="choice" onclick="selectChoice(${i})" role="button" tabindex="0" aria-label="選択肢${labels[i]}: ${c.text}">
           <span class="choice-label">${labels[i]}</span>${c.text}
         </div>
       `).join('')}
@@ -1085,11 +1087,15 @@ document.getElementById('inp-full-name').addEventListener('keydown', e => {
 });
 
 function generateShareUrl(scores) {
+  const allQ = quizMode === 'full' ? [...QUESTIONS, ...EXTRA_QUESTIONS] : QUESTIONS;
   const data = {
     n: userName.fullName,
     m: quizMode,
     s: [scores.A, scores.B, scores.C, scores.D, scores.E],
-    a: answers.map(a => [a.question, a.category, +(a.responseTime.toFixed(1)), a.scene]),
+    a: answers.map(a => {
+      const qi = allQ.findIndex(q => q.scene === a.scene);
+      return [a.question, a.category, +(a.responseTime.toFixed(1)), qi >= 0 ? qi : a.scene];
+    }),
     sk: skipCount,
     d: new Date().toISOString().split('T')[0]
   };
@@ -1273,7 +1279,8 @@ async function downloadPDF() {
       curY += blockH;
     }
 
-    pdf.save(`観念診断_${userName.fullName || '結果'}.pdf`);
+    const safeName = (userName.fullName || '結果').replace(/[\/\\?*:|"<>]/g, '_');
+    pdf.save(`観念診断_${safeName}.pdf`);
     btn.textContent = 'ダウンロード完了 ✓';
     hint.textContent = 'PDFが保存されました';
     setTimeout(() => { btn.textContent = '診断レポートをダウンロード'; btn.disabled = false; hint.textContent = 'PDFファイルとして保存できます'; }, 3000);
@@ -1287,13 +1294,17 @@ async function downloadPDF() {
   const h = window.location.hash;
   if (!h.startsWith('#r=')) return;
   try {
-    const d = JSON.parse(decodeURIComponent(escape(atob(h.slice(3)))));
+    const raw = atob(h.slice(3));
+    const d = JSON.parse(decodeURIComponent(escape(raw)));
     userName = { lineName: '', fullName: d.n };
     quizMode = d.m || 'quick';
+    const allQ = quizMode === 'full' ? [...QUESTIONS, ...EXTRA_QUESTIONS] : QUESTIONS;
     answers.length = 0;
-    d.a.forEach(a => answers.push({
-      question: a[0], category: a[1], responseTime: a[2], scene: a[3] || ('Q' + a[0])
-    }));
+    d.a.forEach(a => {
+      const sceneRef = a[3];
+      const scene = typeof sceneRef === 'number' && allQ[sceneRef] ? allQ[sceneRef].scene : (sceneRef || 'Q' + a[0]);
+      answers.push({ question: a[0], category: a[1], responseTime: a[2], scene });
+    });
     skipCount = d.sk || 0;
     const scores = {A:d.s[0], B:d.s[1], C:d.s[2], D:d.s[3], E:d.s[4]};
     const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
