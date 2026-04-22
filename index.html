@@ -879,6 +879,7 @@ async function submitToGAS(reportUrl) {
     timestamp: new Date().toISOString(),
     lineName: userName.lineName,
     fullName: userName.fullName,
+    quizMode: quizMode,
     reportUrl: reportUrl
   };
   try {
@@ -1048,7 +1049,8 @@ function showResults(scores, topCat) {
   const variance = Object.values(scores).reduce((s,v) => s + Math.pow(v - total/5, 2), 0) / 5;
   const consistency = Math.min(Math.round((variance / Math.max(total/5, 1)) * 25 + 50), 99);
   const avgTime = answers.length > 0 ? answers.reduce((s,a) => s+a.responseTime, 0) / answers.length : 0;
-  const concentration = Math.min(Math.round(Math.max(100 - avgTime * 5, 30)), 95);
+  const timeFactor = quizMode === 'full' ? 3.5 : 5;
+  const concentration = Math.min(Math.round(Math.max(100 - avgTime * timeFactor, 30)), 95);
   document.getElementById('reliability-section').innerHTML = `
     <div class="reliability-section">
       <div class="reliability-title">診断の信頼性指標</div>
@@ -1111,6 +1113,7 @@ function buildPdfBlocks(scores, topCat) {
     <div ${S}="font-size:15px;color:#6B6090;margin-bottom:10px">${topCat.name} ${topCat.typeName}</div>
     <div ${S}="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#7B68EE;color:#fff;font-size:1.3rem;font-weight:800;margin-bottom:4px">${topPct}</div>
     <div ${S}="font-size:11px;color:#9E96B8">影響度スコア ・ ${date}</div>
+    <div ${S}="font-size:11px;color:#7B68EE;margin-top:6px">${quizMode === 'full' ? '精密版（40問）' : '簡易版（15問）'}</div>
   </div>`));
 
   // Score overview bars
