@@ -29,8 +29,8 @@ function doPost(e) {
 
     if (!sheet) {
       sheet = ss.insertSheet('回答データ');
-      sheet.appendRow(['タイムスタンプ','LINE名','氏名','レポートURL','モード']);
-      sheet.getRange(1, 1, 1, 5).setFontWeight('bold');
+      sheet.appendRow(['タイムスタンプ','LINE名','氏名','メールアドレス','レポートURL','モード']);
+      sheet.getRange(1, 1, 1, 6).setFontWeight('bold');
       sheet.setFrozenRows(1);
     }
 
@@ -40,6 +40,7 @@ function doPost(e) {
       data.timestamp || new Date().toISOString(),
       data.lineName || '',
       data.fullName || '',
+      data.email || '',
       reportUrl,
       data.quizMode || 'quick'
     ]);

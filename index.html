@@ -221,10 +221,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
     <div class="input-group">
       <label for="inp-line-name">LINE名</label>
       <input type="text" id="inp-line-name" placeholder="LINEの表示名を入力">
+      <p style="font-size:.75rem;color:var(--text-light);margin-top:.3rem;line-height:1.5">※LINEアプリのプロフィールに表示されている名前を正確にご入力ください</p>
     </div>
     <div class="input-group">
       <label for="inp-full-name">お名前（フルネーム）</label>
       <input type="text" id="inp-full-name" placeholder="山田太郎">
+    </div>
+    <div class="input-group">
+      <label for="inp-email">メールアドレス</label>
+      <input type="email" id="inp-email" placeholder="example@gmail.com">
     </div>
     <p class="name-error" id="name-error"></p>
     <button class="btn-next" onclick="submitName()">診断を開始する</button>
@@ -731,7 +736,7 @@ function getComboKey(id1, id2) {
   return COMBO_DESC[pair] ? pair : null;
 }
 
-let userName = { lineName:'', fullName:'' };
+let userName = { lineName:'', fullName:'', email:'' };
 let quizMode = 'quick';
 let currentQ = 0;
 let totalAnswered = 0;
@@ -763,11 +768,16 @@ function startQuiz() {
 function submitName() {
   const lineName = document.getElementById('inp-line-name').value.trim();
   const fullName = document.getElementById('inp-full-name').value.trim();
-  if (!lineName || !fullName) {
-    document.getElementById('name-error').textContent = '両方入力してください';
+  const email = document.getElementById('inp-email').value.trim();
+  if (!lineName || !fullName || !email) {
+    document.getElementById('name-error').textContent = '全ての項目を入力してください';
     return;
   }
-  userName = { lineName, fullName };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('name-error').textContent = 'メールアドレスの形式が正しくありません';
+    return;
+  }
+  userName = { lineName, fullName, email };
   showScreen('mode-select');
 }
 
@@ -910,6 +920,7 @@ async function submitToGAS(reportUrl) {
     timestamp: new Date().toISOString(),
     lineName: userName.lineName,
     fullName: userName.fullName,
+    email: userName.email,
     quizMode: quizMode,
     reportUrl: reportUrl
   };
